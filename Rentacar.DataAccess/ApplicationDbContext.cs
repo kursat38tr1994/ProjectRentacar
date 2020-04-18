@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Rentacar.Models;
 
 namespace Rentacar.DataAccess.Data
 {
@@ -12,5 +13,7 @@ namespace Rentacar.DataAccess.Data
             : base(options)
         {
         }
+
+       public DbSet<Brand> Brand { get; set; }
     }
 }
