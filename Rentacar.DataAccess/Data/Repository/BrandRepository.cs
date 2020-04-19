@@ -30,7 +30,7 @@ namespace Rentacar.DataAccess.Data.Repository
         public void Update(Brand brand)
         {
             var objFromDb = _db.Brand.FirstOrDefault(s => s.Id == brand.Id);
-            objFromDb.Type = objFromDb.Type;
+            objFromDb.Type = brand.Type;
 
             _db.SaveChanges();
         }
