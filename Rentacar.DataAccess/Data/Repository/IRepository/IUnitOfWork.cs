@@ -7,6 +7,7 @@ namespace Rentacar.DataAccess.Data.Repository.IRepository
     public interface IUnitOfWork : IDisposable
     {
         IBrandRepository Brand { get;}
+        ICarRepository Car { get;}
 
         void Save();
     }

@@ -15,5 +15,7 @@ namespace Rentacar.DataAccess.Data
         }
 
        public DbSet<Brand> Brand { get; set; }
+
+       public DbSet<Car> Car { get; set; }
     }
 }

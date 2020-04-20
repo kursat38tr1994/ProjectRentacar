@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Rentacar.DataAccess.Migrations
 {
-    public partial class AddBrandToDb : Migration
+    public partial class AddBrandAndCarToDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -105,8 +105,8 @@ namespace Rentacar.DataAccess.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -150,8 +150,8 @@ namespace Rentacar.DataAccess.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -161,6 +161,29 @@ namespace Rentacar.DataAccess.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Car",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandId = table.Column<int>(nullable: false),
+                    LicensePlate = table.Column<string>(nullable: false),
+                    Fuel = table.Column<string>(nullable: false),
+                    CurrentPrice = table.Column<double>(nullable: false),
+                    Availability = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Car", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Car_Brand_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brand",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -203,6 +226,11 @@ namespace Rentacar.DataAccess.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Car_BrandId",
+                table: "Car",
+                column: "BrandId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -223,13 +251,16 @@ namespace Rentacar.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Brand");
+                name: "Car");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Brand");
         }
     }
 }

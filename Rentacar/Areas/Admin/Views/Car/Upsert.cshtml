@@ -1,0 +1,89 @@
+﻿@model Rentacar.Models.ViewModels.CarViewModel
+@{
+    var title = "Maak nieuwe Auto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="post" asp-action="Upsert">
+
+    <div class="row px-2 mx-2 backgroundWhite border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.car.Id != 0)
+        {
+            <input type="hidden" asp-for="car.Id" />
+            title = "Auto Wijzigen";
+        }
+
+        <div class="col-12">
+            <h2 class="text-primary">@title</h2>
+            <br />
+        </div>
+        <div class="col-9">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="car.LicensePlate"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="car.LicensePlate" class="form-control" />
+                    <span asp-validation-for="car.LicensePlate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="car.BrandId"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(m => m.car.BrandId, Model.BrandList, "- Selecteer uw Brand - ", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="car.Fuel"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="car.Fuel" class="form-control" />
+                    <span asp-validation-for="car.Fuel" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="car.CurrentPrice"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="car.CurrentPrice" id="txtCurrentPrice" class="form-control" />
+                    <span asp-validation-for="car.CurrentPrice" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="car.Availability"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="car.Availability" class="form-control" />
+                    <span asp-validation-for="car.Availability" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.car.Id != 0)
+                    {
+                        //Edit button and back to list
+                        <partial name="_EditAndBackToListButton" model="Model.car.Id" />
+                    }
+                    else
+                    {
+                          //Create button and back to list
+                        <partial name="_CreateAndBackToListButton" />
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

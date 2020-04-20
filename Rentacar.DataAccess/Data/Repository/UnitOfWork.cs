@@ -13,9 +13,12 @@ namespace Rentacar.DataAccess.Data.Repository
         {
             _db = db;
             Brand = new BrandRepository(_db);
+            Car = new CarRepository(_db);
         }
 
         public IBrandRepository Brand { get; private set; }
+
+        public ICarRepository Car { get; private set; }
 
         public void Dispose()
         {
