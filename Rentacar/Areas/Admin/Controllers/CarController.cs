@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Rentacar.DataAccess.Data.Repository.IRepository;
-using Rentacar.Models.ViewModels;
+using Rentacar.Areas.Admin.ViewModels;
+using Rentacar.BusinessLogic;
+using Rentacar.DataAccess.Data.Dto.CarDto;
 
 
 namespace Rentacar.Areas.Admin.Controllers
@@ -12,14 +13,16 @@ namespace Rentacar.Areas.Admin.Controllers
     [Area("Admin")]
     public class CarController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICarLogic _carLogic;
+        private readonly IBrandLogic _brandLogic;
 
-        [BindProperty]
-        public CarViewModel CarViewModel { get; set; }
+        [BindProperty] 
+        private CarViewModel CarViewModel { get; set; }
 
-        public CarController(IUnitOfWork unitOfWork)
+        public CarController(ICarLogic carLogic, IBrandLogic brandLogic)
         {
-            _unitOfWork = unitOfWork;
+            _carLogic = carLogic;
+            _brandLogic = brandLogic;
         }
 
         public IActionResult Index()
@@ -31,13 +34,13 @@ namespace Rentacar.Areas.Admin.Controllers
         {
             CarViewModel = new CarViewModel()
             {
-                car = new Models.Car(),
-                BrandList = _unitOfWork.Brand.GetBrandListItemsForDropDown()
+                Car = new CarDto(),
+                BrandList = _brandLogic.GetDropDown()
             };
 
             if (id != null)
             {
-                CarViewModel.car = _unitOfWork.Car.Get(id.GetValueOrDefault());
+                CarViewModel.Car = _carLogic.GetId(id);
             }
 
             return View(CarViewModel);
@@ -49,42 +52,33 @@ namespace Rentacar.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (CarViewModel.car.Id == 0)
-                {
-                    _unitOfWork.Car.Add(CarViewModel.car);
-                }
-                else
-                {
-                    _unitOfWork.Car.Update(CarViewModel.car);
-                }
-                _unitOfWork.Save();
+                _carLogic.Upsert(CarViewModel.Car);
                 return RedirectToAction(nameof(Index));
             }
 
-            CarViewModel.BrandList = _unitOfWork.Brand.GetBrandListItemsForDropDown();
+            CarViewModel.BrandList = _brandLogic.GetDropDown();
             return View(CarViewModel);
-
         }
 
         #region Calls
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Json(new { data = _unitOfWork.Car.GetAll(includeProperties: "Brand" ) });
+            return Json(new {data = _carLogic.GetAll()});
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var carFromDb = _unitOfWork.Car.Get(id);
+            var carFromDb = _carLogic.GetId(id);
             if (carFromDb == null)
             {
-                return Json(new { success = false, message = "Probleem bij deleten" });
+                return Json(new {success = false, message = "Probleem bij deleten"});
             }
 
-            _unitOfWork.Brand.Remove(id);
-            _unitOfWork.Save();
-            return Json(new { success = true, message = $"Deleten is gelukt {id}" });
+            _carLogic.Delete(carFromDb.Id);
+            return Json(new {success = true, message = $"Deleten is gelukt {id}"});
         }
 
         #endregion

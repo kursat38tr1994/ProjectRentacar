@@ -41,10 +41,13 @@ namespace Rentacar
                 .AddDefaultUI();
 
             services.AddScoped<IBrandLogic, BrandLogic>();
+            services.AddScoped<ICarLogic, CarLogic>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews().AddNewtonsoftJson();
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddAuthentication().AddCookie();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

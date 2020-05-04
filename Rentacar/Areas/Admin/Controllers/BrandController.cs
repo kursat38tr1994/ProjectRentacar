@@ -14,14 +14,10 @@ namespace Rentacar.Areas.Admin.Controllers
     [Area("Admin")]
     public class BrandController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
         private IBrandLogic _brandLogic;
 
-        public BrandController(IUnitOfWork unitOfWork, IMapper mapper, IBrandLogic brandLogic)
+        public BrandController(IBrandLogic brandLogic)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _brandLogic = brandLogic;
         }
 
@@ -33,7 +29,6 @@ namespace Rentacar.Areas.Admin.Controllers
         public IActionResult Upsert(int? id)
         {
             var brand = new ReadBrandDto();
-           // Brand brand = new Brand();
             if (id == null)
             {
                 return View(brand);
@@ -67,19 +62,19 @@ namespace Rentacar.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id) 
+        public IActionResult Delete(int id)
         {
-            var ObjFromDb = _unitOfWork.Brand.Get(id);
-            if (ObjFromDb == null)
+            var obj =_brandLogic.GetId(id);
+
+            if (obj == null)
             {
                 return Json(new { success = false, message = "Probleem bij deleten" });
             }
+            
+            _brandLogic.Delete(obj.Id);
 
-            _unitOfWork.Brand.Remove(ObjFromDb);
-            _unitOfWork.Save();
-            return Json(new { success = true, message = $"Deleten is gelukt {ObjFromDb}" });
+            return Json(new {success = true, message = $"Deleten is gelukt {obj}"});
         }
-
         #endregion
     }
 }

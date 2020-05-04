@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Rentacar.DataAccess.Data.Dto.BrandDto;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.Models;
@@ -52,7 +53,17 @@ namespace Rentacar.BusinessLogic
         {
             var items = _unitOfWork.Brand.Get(id.GetValueOrDefault());
 
-            return _mapper.Map<ReadBrandDto>(items);
+            var map = _mapper.Map<ReadBrandDto>(items);
+
+            _unitOfWork.Brand.Remove(items);
+            _unitOfWork.Save();
+            return map;
+        }
+
+        public IEnumerable<SelectListItem> GetDropDown()
+        {
+          var obj =  _unitOfWork.Brand.GetBrandListItemsForDropDown();
+          return _mapper.Map<IEnumerable<SelectListItem>>(obj);
         }
     }
 }
