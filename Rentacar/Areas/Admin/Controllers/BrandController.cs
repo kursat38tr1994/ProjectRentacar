@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.BusinessLogic;
+using Rentacar.DataAccess.Data.Dto.BrandDto;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.Models;
 
@@ -29,15 +30,17 @@ namespace Rentacar.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Upsert(int? id) 
+        public IActionResult Upsert(int? id)
         {
-            Brand brand = new Brand();
+            var brand = new ReadBrandDto();
+           // Brand brand = new Brand();
             if (id == null)
             {
                 return View(brand);
             }
-            brand = _unitOfWork.Brand.Get(id.GetValueOrDefault());
 
+            brand = _brandLogic.GetId(id);
+        
             if (brand == null) 
             {
                 return NotFound();
@@ -47,31 +50,20 @@ namespace Rentacar.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Brand brand) 
+        public IActionResult Upsert(ReadBrandDto brand) 
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
-                if (brand.Id == 0)
-                {
-                    _unitOfWork.Brand.Add(brand);
-                }
-                else
-                {
-                    _unitOfWork.Brand.Update(brand);
-                }
-                _unitOfWork.Save();
-                return RedirectToAction(nameof(Index));
+                _brandLogic.Upsert(brand);
             }
             return View(brand);
         }
 
         #region Calls
         [HttpGet]
-        public IActionResult GetAll() 
+        public ActionResult GetAll()
         {
-            
-            return Json(new { data = _brandLogic.GettAll() });
-            //return Json(new { data = _unitOfWork.Brand.GetAll() });
+            return Json(new {data = _brandLogic.GettAll()});
         }
 
         [HttpDelete]

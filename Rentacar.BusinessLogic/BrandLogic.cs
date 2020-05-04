@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Rentacar.DataAccess.Data.Dto.BrandDto;
 using Rentacar.DataAccess.Data.Repository.IRepository;
@@ -17,29 +18,41 @@ namespace Rentacar.BusinessLogic
             _mapper = mapper;
         }
 
-        public IEnumerable<readbranddto> GettAll()
+        public IEnumerable<ReadBrandDto> GettAll()
         {
             var items = _unitOfWork.Brand.GetAll();
-
-            return _mapper.Map<IEnumerable<readbranddto>>(items);
+            return _mapper.Map<IEnumerable<ReadBrandDto>>(items);
         }
 
-        public readbranddto CreateBrand(createbranddto createbranddto)
+        public ReadBrandDto Upsert(ReadBrandDto createbranddto)
         {
             var brandModel = _mapper.Map<Brand>(createbranddto);
-            _unitOfWork.Brand.Add(brandModel);
-            _unitOfWork.Save();
-            var brandReadDto = _mapper.Map<readbranddto>(brandModel);
+            if (createbranddto.Id == 0)
+            {
+                _unitOfWork.Brand.Add(brandModel);
+            }
+            else
+            {
+                _unitOfWork.Brand.Update(brandModel);
+            }
 
-            return brandReadDto;
+            _unitOfWork.Save();
+            
+            return _mapper.Map<ReadBrandDto>(brandModel);
         }
 
-        public readbranddto GetId(int? id)
+        public ReadBrandDto GetId(int? id)
         {
             var items = _unitOfWork.Brand.Get(id.GetValueOrDefault());
-            
-            return _mapper.Map<readbranddto>(items); 
-          
+
+            return _mapper.Map<ReadBrandDto>(items);
+        }
+        
+        public ReadBrandDto Delete(int? id)
+        {
+            var items = _unitOfWork.Brand.Get(id.GetValueOrDefault());
+
+            return _mapper.Map<ReadBrandDto>(items);
         }
     }
 }

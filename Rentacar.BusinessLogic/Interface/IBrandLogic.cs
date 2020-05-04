@@ -5,8 +5,8 @@ namespace Rentacar.BusinessLogic
 {
     public interface IBrandLogic
     {
-        IEnumerable<readbranddto> GettAll();
-        readbranddto CreateBrand(createbranddto createbranddto);
-        readbranddto GetId(int? id);
+        IEnumerable<ReadBrandDto> GettAll();
+        ReadBrandDto Upsert(ReadBrandDto createbranddto);
+        ReadBrandDto GetId(int? id);
     }
 }

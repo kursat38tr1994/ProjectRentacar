@@ -1,6 +1,6 @@
 ﻿namespace Rentacar.DataAccess.Data.Dto.BrandDto
 {
-    public class createbranddto
+    public class CreateBrandDto
     {
         public string Type { get; set; }
     }

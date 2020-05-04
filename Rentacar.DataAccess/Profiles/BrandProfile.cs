@@ -8,9 +8,9 @@ namespace Rentacar.DataAccess.Data.Profiles
     {
         public BrandProfile()
         {
-            CreateMap<Brand, readbranddto>();
+            CreateMap<Brand, ReadBrandDto>();
             
-            CreateMap<createbranddto, Brand>();
+            CreateMap<ReadBrandDto, Brand>();
         }
     }
 }
