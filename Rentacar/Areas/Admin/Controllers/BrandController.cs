@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Rentacar.BusinessLogic;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.Models;
 
@@ -12,10 +14,14 @@ namespace Rentacar.Areas.Admin.Controllers
     public class BrandController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private IMapper _mapper;
+        private IBrandLogic _brandLogic;
 
-        public BrandController(IUnitOfWork unitOfWork)
+        public BrandController(IUnitOfWork unitOfWork, IMapper mapper, IBrandLogic brandLogic)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _brandLogic = brandLogic;
         }
 
         public IActionResult Index()
@@ -63,7 +69,9 @@ namespace Rentacar.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll() 
         {
-            return Json(new { data = _unitOfWork.Brand.GetAll() });
+            
+            return Json(new { data = _brandLogic.GettAll() });
+            //return Json(new { data = _unitOfWork.Brand.GetAll() });
         }
 
         [HttpDelete]

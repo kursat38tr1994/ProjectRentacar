@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -12,6 +13,7 @@ using Rentacar.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Rentacar.BusinessLogic;
 using Rentacar.DataAccess.Data;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.DataAccess.Data.Repository;
@@ -38,9 +40,11 @@ namespace Rentacar
                 .AddDefaultTokenProviders()
                 .AddDefaultUI();
 
+            services.AddScoped<IBrandLogic, BrandLogic>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

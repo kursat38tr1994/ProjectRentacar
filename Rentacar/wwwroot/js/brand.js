@@ -8,7 +8,7 @@ function loadDataTable() {
     
     dataTable = $('#tblData').DataTable({
         "ajax": {
-            "url": "/admin/brand/GetAll",
+            "url": "/admin/readbranddto/GetAll",
             "type": "GET",
             "datatype": "json"
         },
