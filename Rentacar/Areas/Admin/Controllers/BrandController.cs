@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Rentacar.Areas.Admin.ViewModels;
 using Rentacar.BusinessLogic;
-using Rentacar.DataAccess.Data.Dto.BrandDto;
 using Rentacar.DataAccess.Data.Repository.IRepository;
+using Rentacar.DataAccess.Dto.BrandDto;
 using Rentacar.Models;
 
 namespace Rentacar.Areas.Admin.Controllers
@@ -15,10 +16,12 @@ namespace Rentacar.Areas.Admin.Controllers
     public class BrandController : Controller
     {
         private IBrandLogic _brandLogic;
+        private readonly IMapper _mapper;
 
-        public BrandController(IBrandLogic brandLogic)
+        public BrandController(IBrandLogic brandLogic, IMapper mapper)
         {
             _brandLogic = brandLogic;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -28,15 +31,15 @@ namespace Rentacar.Areas.Admin.Controllers
 
         public IActionResult Upsert(int? id)
         {
-            var brand = new ReadBrandDto();
+            var brand = new BrandViewModel();
             if (id == null)
             {
                 return View(brand);
             }
 
-            brand = _brandLogic.GetId(id);
+            var obj = _brandLogic.GetId(id);
         
-            if (brand == null) 
+            if (obj == null) 
             {
                 return NotFound();
             }
@@ -45,11 +48,12 @@ namespace Rentacar.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(ReadBrandDto brand) 
+        public IActionResult Upsert(BrandViewModel brand) 
         {
             if (ModelState.IsValid)
             {
-                _brandLogic.Upsert(brand);
+                var mapper = _mapper.Map<BrandDto>(brand);
+                _brandLogic.Upsert(mapper);
             }
             return View(brand);
         }

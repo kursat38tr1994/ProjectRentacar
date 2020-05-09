@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Rentacar.DataAccess.Migrations
 {
-    public partial class AddBrandAndCarToDb : Migration
+    public partial class AddToDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

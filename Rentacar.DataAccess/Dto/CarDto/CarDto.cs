@@ -1,6 +1,4 @@
-﻿using Rentacar.DataAccess.Data.Dto.BrandDto;
-
-namespace Rentacar.DataAccess.Data.Dto.CarDto
+﻿namespace Rentacar.DataAccess.Dto.CarDto
 {
     public class CarDto
     {
@@ -8,7 +6,7 @@ namespace Rentacar.DataAccess.Data.Dto.CarDto
         
         public int BrandId { get; set; }
         
-        public ReadBrandDto Brand { get; set; }
+        public BrandDto.BrandDto Brand { get; set; }
         
         public string LicensePlate { get; set; }
         

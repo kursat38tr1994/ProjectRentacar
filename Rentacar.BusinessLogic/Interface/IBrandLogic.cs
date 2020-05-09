@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Rentacar.DataAccess.Data.Dto.BrandDto;
+using Rentacar.DataAccess.Dto.BrandDto;
 
 namespace Rentacar.BusinessLogic
 {
     public interface IBrandLogic
     {
-        IEnumerable<ReadBrandDto> GettAll();
-        ReadBrandDto Upsert(ReadBrandDto createbranddto);
-        ReadBrandDto GetId(int? id);
-        ReadBrandDto Delete(int? id);
+        IEnumerable<BrandDto> GettAll();
+        BrandDto Upsert(BrandDto createbranddto);
+        BrandDto GetId(int? id);
+        BrandDto Delete(int? id);
         IEnumerable<SelectListItem> GetDropDown();
     }
 }

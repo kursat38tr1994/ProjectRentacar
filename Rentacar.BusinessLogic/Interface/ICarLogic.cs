@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Rentacar.DataAccess.Data.Dto.CarDto;
+using Rentacar.DataAccess.Dto.CarDto;
 
 namespace Rentacar.BusinessLogic
 {

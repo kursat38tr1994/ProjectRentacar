@@ -1,6 +1,6 @@
-﻿namespace Rentacar.DataAccess.Data.Dto.BrandDto
+﻿namespace Rentacar.DataAccess.Dto.BrandDto
 {
-    public class ReadBrandDto
+    public class BrandDto
     {
         public int Id { get; set; }
         public string Type { get; set; }

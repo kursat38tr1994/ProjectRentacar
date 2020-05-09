@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Rentacar.DataAccess.Data.Dto.BrandDto;
-using Rentacar.DataAccess.Data.Dto.CarDto;
+using Rentacar.DataAccess.Dto.CarDto;
 using Rentacar.Models;
 
 namespace Rentacar.DataAccess.Data.Profiles

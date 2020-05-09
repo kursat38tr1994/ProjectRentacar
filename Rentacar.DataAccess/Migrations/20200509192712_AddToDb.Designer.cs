@@ -10,8 +10,8 @@ using Rentacar.DataAccess.Data;
 namespace Rentacar.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200419235036_AddBrandAndCarToDb")]
-    partial class AddBrandAndCarToDb
+    [Migration("20200509192712_AddToDb")]
+    partial class AddToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

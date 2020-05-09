@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.Areas.Admin.ViewModels;
 using Rentacar.BusinessLogic;
-using Rentacar.DataAccess.Data.Dto.CarDto;
+using Rentacar.DataAccess.Dto.CarDto;
 
 
 namespace Rentacar.Areas.Admin.Controllers
@@ -15,14 +16,16 @@ namespace Rentacar.Areas.Admin.Controllers
     {
         private readonly ICarLogic _carLogic;
         private readonly IBrandLogic _brandLogic;
+        private readonly IMapper _mapper;
 
         [BindProperty] 
-        private CarViewModel CarViewModel { get; set; }
+        public CarViewModel CarViewModel { get; set; }
 
-        public CarController(ICarLogic carLogic, IBrandLogic brandLogic)
+        public CarController(ICarLogic carLogic, IBrandLogic brandLogic, IMapper mapper)
         {
             _carLogic = carLogic;
             _brandLogic = brandLogic;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -32,6 +35,8 @@ namespace Rentacar.Areas.Admin.Controllers
 
         public IActionResult Upsert(int? id)
         {
+            var obj = _carLogic.GetId(id);
+            var objMapper = _mapper.Map<CarViewModel>(obj);
             CarViewModel = new CarViewModel()
             {
                 Car = new CarDto(),
@@ -40,7 +45,7 @@ namespace Rentacar.Areas.Admin.Controllers
 
             if (id != null)
             {
-                CarViewModel.Car = _carLogic.GetId(id);
+                CarViewModel = objMapper;
             }
 
             return View(CarViewModel);
@@ -52,7 +57,8 @@ namespace Rentacar.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _carLogic.Upsert(CarViewModel.Car);
+                var mapper = _mapper.Map<CarDto>(CarViewModel);
+                _carLogic.Upsert(mapper);
                 return RedirectToAction(nameof(Index));
             }
 

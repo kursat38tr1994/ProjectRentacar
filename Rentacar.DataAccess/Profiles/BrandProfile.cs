@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using Rentacar.DataAccess.Data.Dto.BrandDto;
+using Rentacar.DataAccess.Dto.BrandDto;
 using Rentacar.Models;
 
-namespace Rentacar.DataAccess.Data.Profiles
+namespace Rentacar.DataAccess.Profiles
 {
     public class BrandProfile : Profile
     {
         public BrandProfile()
         {
-            CreateMap<Brand, ReadBrandDto>();
+            CreateMap<Brand, BrandDto>();
             
-            CreateMap<ReadBrandDto, Brand>();
+            CreateMap<BrandDto, Brand>();
         }
     }
 }

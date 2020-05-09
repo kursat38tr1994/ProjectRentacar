@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
 using AutoMapper;
-using Rentacar.DataAccess.Data.Dto.CarDto;
 using Rentacar.DataAccess.Data.Repository.IRepository;
+using Rentacar.DataAccess.Dto.CarDto;
 using Rentacar.Models;
 
 namespace Rentacar.BusinessLogic
