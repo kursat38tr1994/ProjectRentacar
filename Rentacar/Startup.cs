@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rentacar.BusinessLogic;
+using Rentacar.BusinessLogic.Interface;
+using Rentacar.DataAccess;
 using Rentacar.DataAccess.Data;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.DataAccess.Data.Repository;
@@ -43,6 +45,7 @@ namespace Rentacar
             services.AddScoped<IBrandLogic, BrandLogic>();
             services.AddScoped<ICarLogic, CarLogic>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IFuelLogic, FuelLogic>();
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Rentacar.Models;
 
-namespace Rentacar.DataAccess.Data
+namespace Rentacar.DataAccess
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -17,5 +14,7 @@ namespace Rentacar.DataAccess.Data
        public DbSet<Brand> Brand { get; set; }
 
        public DbSet<Car> Car { get; set; }
+
+       public DbSet<Fuel> Fuel { get; set; }
     }
 }

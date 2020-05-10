@@ -12,13 +12,17 @@ namespace Rentacar.DataAccess.Data.Repository
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
+           
             Brand = new BrandRepository(_db);
             Car = new CarRepository(_db);
+            Fuel = new FuelRepository(_db);
         }
 
         public IBrandRepository Brand { get; private set; }
 
         public ICarRepository Car { get; private set; }
+
+        public IFuelRepository Fuel { get; }
 
         public void Dispose()
         {

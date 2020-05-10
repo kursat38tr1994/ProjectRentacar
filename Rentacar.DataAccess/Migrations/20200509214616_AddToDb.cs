@@ -60,6 +60,19 @@ namespace Rentacar.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Fuel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fuel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -252,6 +265,9 @@ namespace Rentacar.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Car");
+
+            migrationBuilder.DropTable(
+                name: "Fuel");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
