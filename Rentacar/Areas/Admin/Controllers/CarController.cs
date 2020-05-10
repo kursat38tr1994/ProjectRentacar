@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.Areas.Admin.ViewModels;
 using Rentacar.BusinessLogic;
+using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess.Dto.CarDto;
 
 
@@ -17,15 +18,17 @@ namespace Rentacar.Areas.Admin.Controllers
         private readonly ICarLogic _carLogic;
         private readonly IBrandLogic _brandLogic;
         private readonly IMapper _mapper;
+        private readonly IFuelLogic _fuelLogic;
 
         [BindProperty] 
         public CarViewModel CarViewModel { get; set; }
 
-        public CarController(ICarLogic carLogic, IBrandLogic brandLogic, IMapper mapper)
+        public CarController(ICarLogic carLogic, IBrandLogic brandLogic, IMapper mapper, IFuelLogic fuelLogic)
         {
             _carLogic = carLogic;
             _brandLogic = brandLogic;
             _mapper = mapper;
+            _fuelLogic = fuelLogic;
         }
 
         public IActionResult Index()
@@ -36,16 +39,16 @@ namespace Rentacar.Areas.Admin.Controllers
         public IActionResult Upsert(int? id)
         {
             var obj = _carLogic.GetId(id);
-            var objMapper = _mapper.Map<CarViewModel>(obj);
             CarViewModel = new CarViewModel()
             {
                 Car = new CarDto(),
-                BrandList = _brandLogic.GetDropDown()
+                BrandList = _brandLogic.GetDropDown(),
+                FuelList = _fuelLogic.GetDropDown()
             };
 
             if (id != null)
             {
-                CarViewModel = objMapper;
+                CarViewModel.Car = obj;
             }
 
             return View(CarViewModel);
@@ -53,16 +56,18 @@ namespace Rentacar.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert()
+        public IActionResult Upsert(CarViewModel carViewModel)
         {
+         //   CarViewModel = _mapper.Map<CarViewModel>(CarViewModel);
             if (ModelState.IsValid)
             {
-                var mapper = _mapper.Map<CarDto>(CarViewModel);
-                _carLogic.Upsert(mapper);
+                
+                _carLogic.Upsert(_mapper.Map<CarDto>(CarViewModel));
                 return RedirectToAction(nameof(Index));
             }
 
             CarViewModel.BrandList = _brandLogic.GetDropDown();
+            CarViewModel.FuelList = _brandLogic.GetDropDown();
             return View(CarViewModel);
         }
 

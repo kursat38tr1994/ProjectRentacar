@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.DataAccess.Dto.FuelDto;
@@ -50,6 +51,12 @@ namespace Rentacar.BusinessLogic
             var obj = _unitOfWork.Fuel.GetAll();
 
             return _mapper.Map<IEnumerable<FuelDto>>(obj);
+        }
+
+        public IEnumerable<SelectListItem> GetDropDown()
+        {
+            var obj = _unitOfWork.Fuel.GetFuelListItemsForDropDown();
+            return _mapper.Map<IEnumerable<SelectListItem>>(obj);
         }
     }
 }

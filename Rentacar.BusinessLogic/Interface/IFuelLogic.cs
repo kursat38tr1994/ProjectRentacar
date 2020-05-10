@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Rentacar.DataAccess.Dto.FuelDto;
 
 namespace Rentacar.BusinessLogic.Interface
@@ -8,5 +9,6 @@ namespace Rentacar.BusinessLogic.Interface
         FuelDto Upsert(FuelDto createFuel);
         FuelDto GetById(int? id);
         IEnumerable<FuelDto> GetAll();
+        IEnumerable<SelectListItem> GetDropDown();
     }
 }

@@ -247,9 +247,8 @@ namespace Rentacar.DataAccess.Migrations
                     b.Property<double>("CurrentPrice")
                         .HasColumnType("float");
 
-                    b.Property<string>("Fuel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FuelId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()
@@ -258,6 +257,8 @@ namespace Rentacar.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("FuelId");
 
                     b.ToTable("Car");
                 });
@@ -334,6 +335,12 @@ namespace Rentacar.DataAccess.Migrations
                     b.HasOne("Rentacar.Models.Brand", "Brand")
                         .WithMany()
                         .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rentacar.Models.Fuel", "Fuel")
+                        .WithMany()
+                        .HasForeignKey("FuelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

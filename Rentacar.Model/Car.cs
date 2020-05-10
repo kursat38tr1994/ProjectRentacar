@@ -20,8 +20,10 @@ namespace Rentacar.Models
         [Required]
         public string LicensePlate { get; set; }
 
-        [Required]
-        public string Fuel { get; set; }
+        public int FuelId { get; set; }
+
+        [ForeignKey("FuelId")]
+        public Fuel Fuel { get; set; }
 
         [Required]
         [Range(1, 10000)]

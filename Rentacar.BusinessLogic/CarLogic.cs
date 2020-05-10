@@ -20,9 +20,11 @@ namespace Rentacar.BusinessLogic
 
         public IEnumerable<CarDto> GetAll()
         {
-            var obj = _unitOfWork.Car.GetAll(includeProperties: "Brand");
+            var obj = _unitOfWork.Car.GetAll();
             return _mapper.Map<IEnumerable<CarDto>>(obj);
         }
+
+
 
         public CarDto GetId(int? id)
         {

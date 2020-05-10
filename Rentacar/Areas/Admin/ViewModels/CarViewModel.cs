@@ -10,5 +10,6 @@ namespace Rentacar.Areas.Admin.ViewModels
     {
         public CarDto Car { get; set; }
         public IEnumerable<SelectListItem> BrandList { get; set; }
+        public IEnumerable<SelectListItem> FuelList { get; set; }
     }
 }

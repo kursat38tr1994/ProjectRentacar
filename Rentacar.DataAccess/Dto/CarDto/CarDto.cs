@@ -9,9 +9,11 @@
         public BrandDto.BrandDto Brand { get; set; }
         
         public string LicensePlate { get; set; }
-        
-        public string Fuel { get; set; }
-        
+
+        public int FuelId { get; set; }
+
+        public FuelDto.FuelDto Fuel { get; set; }
+
         public double CurrentPrice { get; set; }
         
         public bool Availability { get; set; }

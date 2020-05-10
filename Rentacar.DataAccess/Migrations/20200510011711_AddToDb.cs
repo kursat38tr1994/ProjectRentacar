@@ -186,7 +186,7 @@ namespace Rentacar.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BrandId = table.Column<int>(nullable: false),
                     LicensePlate = table.Column<string>(nullable: false),
-                    Fuel = table.Column<string>(nullable: false),
+                    FuelId = table.Column<int>(nullable: false),
                     CurrentPrice = table.Column<double>(nullable: false),
                     Availability = table.Column<bool>(nullable: false)
                 },
@@ -197,6 +197,12 @@ namespace Rentacar.DataAccess.Migrations
                         name: "FK_Car_Brand_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brand",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Car_Fuel_FuelId",
+                        column: x => x.FuelId,
+                        principalTable: "Fuel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -244,6 +250,11 @@ namespace Rentacar.DataAccess.Migrations
                 name: "IX_Car_BrandId",
                 table: "Car",
                 column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Car_FuelId",
+                table: "Car",
+                column: "FuelId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -267,9 +278,6 @@ namespace Rentacar.DataAccess.Migrations
                 name: "Car");
 
             migrationBuilder.DropTable(
-                name: "Fuel");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -277,6 +285,9 @@ namespace Rentacar.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Brand");
+
+            migrationBuilder.DropTable(
+                name: "Fuel");
         }
     }
 }
