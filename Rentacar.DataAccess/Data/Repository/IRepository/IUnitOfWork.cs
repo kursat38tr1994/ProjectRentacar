@@ -9,6 +9,7 @@ namespace Rentacar.DataAccess.Data.Repository.IRepository
         IBrandRepository Brand { get;}
         ICarRepository Car { get;}
         IFuelRepository Fuel { get;}
+        IUserRepository User { get;}
 
         void Save();
     }

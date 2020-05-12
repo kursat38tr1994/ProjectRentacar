@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.Areas.Admin.ViewModels;
 using Rentacar.BusinessLogic;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.DataAccess.Dto.BrandDto;
 using Rentacar.Models;
+using Rentacar.Utility;
 
 namespace Rentacar.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Admin)]
     public class BrandController : Controller
     {
         private IBrandLogic _brandLogic;

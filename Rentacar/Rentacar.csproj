@@ -20,10 +20,25 @@
   <ItemGroup>
     <ProjectReference Include="..\Rentacar.BusinessLogic\Rentacar.BusinessLogic.csproj" />
     <ProjectReference Include="..\Rentacar.DataAccess\Rentacar.DataAccess.csproj" />
+    <ProjectReference Include="..\Rentacar.Utility\Rentacar.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\User\Controllers\" />
+    <Folder Include="Areas\User\Models\" />
+    <Folder Include="Areas\User\Views\" />
     <Folder Include="wwwroot\images\services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Shared\_Identity.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\js\user.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

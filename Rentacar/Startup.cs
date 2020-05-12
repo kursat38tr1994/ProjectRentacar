@@ -13,12 +13,16 @@ using Rentacar.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Rentacar.Areas.Admin.Service;
 using Rentacar.BusinessLogic;
 using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess;
 using Rentacar.DataAccess.Data;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.DataAccess.Data.Repository;
+using Rentacar.Utility;
+using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace Rentacar
 {
@@ -37,23 +41,49 @@ namespace Rentacar
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
-                .AddDefaultUI();
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 3;
+                options.SignIn.RequireConfirmedEmail = true;
+            });
+
+            
+            
             services.AddScoped<IBrandLogic, BrandLogic>();
             services.AddScoped<ICarLogic, CarLogic>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFuelLogic, FuelLogic>();
+            services.AddScoped<ILogger, Logger<Car>>();
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Admin/Identity/SignIn";
+                options.AccessDeniedPath = "/Admin/Identity/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromHours(10);
+            });
+
+            services.Configure<SmtpOptions>(Configuration.GetSection("Smtp"));
+            services.AddScoped<IEmailSender, SmtpEmailSender>();
             services.AddAuthentication().AddCookie();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", p =>
+                {
+                    p.RequireRole(SD.Admin);
+                });
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to  configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

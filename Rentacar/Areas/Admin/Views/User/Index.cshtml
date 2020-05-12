@@ -1,0 +1,112 @@
+﻿@model IEnumerable<User>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="border backgroundWhite">
+    <div class="row">
+        <h2 class="text-info">Gebruikers</h2>
+    </div>
+    <div class="col-9 text-sm-right" style="margin-left: 60%;">
+        <div class="col-6 text-right">
+            <a asp-area="Admin" asp-controller="Identity" asp-action="SignUp" class="btn btn-primary"><i class="fas fa-plus"></i> &nbsp; Maak nieuwe gebruiker</a>
+        </div>
+    </div>
+
+    <br/>
+    @if (Model.Count() > 1)
+    {
+        <table class="table table-striped border">
+            <tr class="table-secondary">
+                <th>
+                    @Html.DisplayNameFor(m => m.Email);
+                </th>
+                <th>
+                    @Html.DisplayNameFor(m => m.Role);
+                </th>
+                @* <th> *@
+                @*     @Html.DisplayNameFor(m => m.PhoneNumber); *@
+                @* </th> *@
+                <th>
+                    @Html.DisplayNameFor(m => m.LockoutEnabled);
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.Role)
+                    </td>
+                    @* <td> *@
+                    @*     @Html.DisplayFor(m => item.PhoneNumber) *@
+                    @* </td> *@
+                    <td>
+                        @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                        {
+                            <a class="btn btn-danger" asp-action="Lock" style="width: 50px;" asp-route-id="@item.Id">
+                                <i class="fas fa-lock"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success" asp-action="Unlock" style="width: 50px;" asp-route-id="@item.Id">
+                                <i class="fas fa-lock-open"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>Geen Gebruikers</p>
+    }
+
+</div>
+
+@* <p> *@
+@*     <a asp-action="Create">Create New</a> *@
+@* </p> *@
+
+
+@* @{ *@
+@* *@
+@*     Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@* } *@
+@* *@
+@* <br /> *@
+@* <div class="border backgroundWhite"> *@
+@*     <div class="row"> *@
+@*         <div class="col-6"> *@
+@*             <h2 class="text-primary">Gebruikers</h2> *@
+@*         </div> *@
+@*         <div class="col-6 text-right"> *@
+@*             <a asp-area="Admin"  asp-controller="Identity" asp-action="SignUp" class="btn btn-primary"><i class="fas fa-plus"></i> &nbsp; Maak nieuwe gebruiker</a> *@
+@*         </div> *@
+@*     </div> *@
+@* *@
+@*     <br /> *@
+@*     <br /> *@
+@* *@
+@*     <table id="tblData" class="table table-striped table-bordered" style="width:100%"> *@
+@*         <thead> *@
+@*         <tr> *@
+@*             <th>Email</th> *@
+@*             <th>Role</th> *@
+@*         </tr> *@
+@*         </thead> *@
+@*     </table> *@
+@* </div> *@
+@* *@
+@* @section Scripts{ *@
+@*      *@
+@*     <script src="~/js/user.js"></script> *@
+@* } *@

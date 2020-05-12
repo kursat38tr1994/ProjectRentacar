@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.Areas.Admin.ViewModels;
 using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess.Dto.FuelDto;
+using Rentacar.Utility;
 
 namespace Rentacar.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Admin)]
     public class FuelController : Controller
     {
         private readonly IMapper _iMapper;

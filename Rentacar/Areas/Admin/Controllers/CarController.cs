@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.Areas.Admin.ViewModels;
 using Rentacar.BusinessLogic;
 using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess.Dto.CarDto;
+using Rentacar.Utility;
 
 
 namespace Rentacar.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Admin)]
     public class CarController : Controller
     {
         private readonly ICarLogic _carLogic;
