@@ -1,4 +1,8 @@
 ﻿@using Rentacar.Utility
+@using Microsoft.AspNetCore.Http;
+@* Opzoeken!!!!! *@
+@inject IHttpContextAccessor HttpContextAccessor
+@using Rentacar.Extensions
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,13 +58,42 @@
                 <li class="nav-item">
                     <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </li>
-                @if (User.IsInRole(SD.Admin)){
+
+                @if (User.IsInRole(SD.Admin))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link " asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+                    </li>
+                }
                 <li class="nav-item">
-                    <a class="nav-link " asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+                    <a class="nav-link " asp-area="Customer" asp-controller="Car" asp-action="Index">Cars</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " asp-area="Admin" asp-controller="Order" asp-action="Index">Orders</a>
                 </li>
                 @* <li class="nav-item"> *@
                 @*     <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Member">Member</a> *@
                 @* </li> *@
+
+                @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart) != null)
+                {
+                    <li style="color: white">
+                        <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link text-white">
+                            @{
+                                var count = HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart);
+                            }
+                            <i class="fas fa-shopping-cart"> </i>&nbsp; (@count)
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li style="color: white">
+                        <a href="#" class="nav-link text-white">
+                            <i class="fas fa-shopping-cart"> </i>&nbsp; (0)
+                        </a>
+                    </li>
                 }
             </ul>
 

@@ -1,0 +1,99 @@
+﻿@model Rentacar.Areas.Customer.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Cars";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@* <div class="container backgroundWhite"> *@
+@*     <div class="card"> *@
+@*         <div class="card-header bg-light text-light ml-0 row container"> *@
+@*             <div class="col-12 col-md-6"> *@
+@*                 <h1 class="text-primary "> @Model.Car.LicensePlate</h1> *@
+@*             </div> *@
+@*             <div class="col-12 col-md-6 text-md-right"> *@
+@*                 <h1 class="text-muted "> Total: @Model.Car.CurrentPrice</h1> *@
+@*             </div> *@
+@*             <div class="col-12 col-md-6 text-md-right"> *@
+@*                 <h1 class="text-muted "> Total: @Model.Car.Brand.Type</h1> *@
+@*             </div> *@
+@*         </div> *@
+@*         <div class="card-body"> *@
+@*             <div class="container rounded p-2"> *@
+@*                 <div class="col-12 col-lg-8"> *@
+@*                     <div class="row"> *@
+@*                         <div class="col-12"> *@
+@*                             <h3 class="text-success"> Huurprijs: @Model.Car.CurrentPrice</h3> *@
+@*                             <h4 class="text-muted"> Kenteken: @Model.Car.LicensePlate</h4> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*         <div class="card-footer"> *@
+@*             <div class="row"> *@
+@*                 <div class="col-12 col-md-6 pb-1"> *@
+@*                     <a asp-action="Index" class="btn btn-success form-control btn-lg " style="height: 50px"> Keer Terug</a> *@
+@*                 </div> *@
+@*                 <div class="col-12 col-md-6 pb-1"> *@
+@*                     <a asp-action="AddToCart" asp-route-carId="@Model.Id" class="btn btn-primary btn-square form-control btn-lg " style="height: 50px"> Voeg toe aan Winkelmand</a> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
+
+
+
+<form method="post">
+    <input hidden asp-for="CarId"/>
+    <div class="container backgroundWhite">
+        <div class="card">
+            <div class="card-header bg-light text-light ml-0 row container">
+                <div class="col-12 col-md-6">
+                    <h1 class="text-primary">@Model.Car.LicensePlate</h1>
+                </div>
+                @* <div class="col-12 col-md-6 text-md-right pt-4"> *@
+                @*     <span class="badge badge-success pt-2" style="height:30px;">@Model.Car.Brand.Type</span> *@
+                @*     <span class="badge badge-warning pt-2" style="height:30px;">--CATEGORY --</span> *@
+                @* </div> *@
+            </div>
+            <div class="card-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-8 col-lg-8">
+
+                            <div class="row pl-2">
+                                <h4 class="text-muted">Kenteken:  @Model.Car.LicensePlate</h4>
+                            </div>
+                            
+                            
+                            <div class="row pl-2">
+                                <h5 class="text-primary">Prijs: @(string.Format("{0:C}", Model.Car.CurrentPrice))</h5>
+                            </div>  
+                            <br>
+                            <div class="row pl-2">
+                                <h5 class="text-primary">Samenvatting:  @Model.Car.Description</h5>
+                            </div>
+                            
+                        </div>
+                        <div class="col-12 col-lg-3 offset-lg-1 text-center">
+                            <img src="https://via.placeholder.com/150" width="100%" class="rounded"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-12 col-md-6 pb-1">
+                        <a asp-action="Index" class="btn btn-success form-control  btn-square btn-lg" style="height:50px;">Terug naar auto's</a>
+                    </div>
+                    <div class="col-12 col-md-6 pb-1">
+
+                        <button type="submit" value="Add to Cart" class="btn btn-primary btn-square btn-lg form-control" style="height:50px;">Toevoegen aan winkelmand</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

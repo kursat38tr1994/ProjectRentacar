@@ -10,6 +10,9 @@ namespace Rentacar.DataAccess.Data.Repository.IRepository
         ICarRepository Car { get;}
         IFuelRepository Fuel { get;}
         IUserRepository User { get;}
+        IRentRepository Rent { get;}
+        IRentDetailsRepository RentDetails { get;}
+        IShoppingCartRepository ShoppingCart { get;}
 
         void Save();
     }

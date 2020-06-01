@@ -8,9 +8,9 @@
 
     <div class="row px-2 mx-2 backgroundWhite border">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @if (Model.Car.Id != 0)
+        @if (Model.Id != 0)
         {
-            <input type="hidden" asp-for="Car.Id" />
+            <input type="hidden" asp-for="Id" />
             title = "Auto Wijzigen";
         }
 
@@ -21,58 +21,58 @@
         <div class="col-9">
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Car.LicensePlate"></label>
+                    <label asp-for="LicensePlate"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Car.LicensePlate" class="form-control" />
-                    <span asp-validation-for="Car.LicensePlate" class="text-danger"></span>
+                    <input asp-for="LicensePlate" class="form-control" />
+                    <span asp-validation-for="LicensePlate" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Car.BrandId"></label>
+                    <label asp-for="BrandId"></label>
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.Car.BrandId, Model.BrandList, "- Selecteer uw Brand - ", new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.BrandId, Model.BrandList, "- Selecteer uw Brand - ", new { @class = "form-control" })
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Car.FuelId"></label>
+                    <label asp-for="FuelId"></label>
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.Car.FuelId, Model.FuelList, "- Selecteer uw Fuel - ", new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.FuelId, Model.FuelList, "- Selecteer uw Fuel - ", new { @class = "form-control" })
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Car.CurrentPrice"></label>
+                    <label asp-for="CurrentPrice"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Car.CurrentPrice" id="txtCurrentPrice" class="form-control" />
-                    <span asp-validation-for="Car.CurrentPrice" class="text-danger"></span>
+                    <input asp-for="CurrentPrice" id="txtCurrentPrice" class="form-control" />
+                    <span asp-validation-for="CurrentPrice" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Car.Availability"></label>
+                    <label asp-for="Availability"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Car.Availability" class="form-control" />
-                    <span asp-validation-for="Car.Availability" class="text-danger"></span>
+                    <input asp-for="Availability" class="form-control" />
+                    <span asp-validation-for="Availability" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-8 offset-4">
-                    @if (Model.Car.Id != 0)
+                    @if (Model.Id != 0)
                     {
                         //Edit button and back to list
-                        <partial name="_EditAndBackToListButton" model="Model.Car.Id" />
+                        <partial name="_EditAndBackToListButton" model="Model.Id" />
                     }
                     else
                     {

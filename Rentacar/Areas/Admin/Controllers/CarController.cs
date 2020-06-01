@@ -36,22 +36,23 @@ namespace Rentacar.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = new CarViewModel();
+            
+            return View(model);
         }
 
         public IActionResult Upsert(int? id)
         {
-            var obj = _carLogic.GetId(id);
-            CarViewModel = new CarViewModel()
+            CarViewModel = new CarViewModel
             {
                 Car = new CarDto(),
                 BrandList = _brandLogic.GetDropDown(),
-                FuelList = _fuelLogic.GetDropDown()
+                FuelList = _fuelLogic.GetDropDown(),
             };
 
             if (id != null)
             {
-                CarViewModel.Car = obj;
+                CarViewModel.Car = _carLogic.GetId(id);
             }
 
             return View(CarViewModel);
@@ -62,16 +63,16 @@ namespace Rentacar.Areas.Admin.Controllers
         public IActionResult Upsert(CarViewModel carViewModel)
         {
          //   CarViewModel = _mapper.Map<CarViewModel>(CarViewModel);
-            if (ModelState.IsValid)
-            {
-                
-                _carLogic.Upsert(_mapper.Map<CarDto>(CarViewModel));
-                return RedirectToAction(nameof(Index));
-            }
+         if (ModelState.IsValid)
+         {
+             _carLogic.Upsert(_mapper.Map<CarDto>(CarViewModel));
+             return RedirectToAction(nameof(Index));
+         }
 
-            CarViewModel.BrandList = _brandLogic.GetDropDown();
-            CarViewModel.FuelList = _brandLogic.GetDropDown();
-            return View(CarViewModel);
+         CarViewModel.BrandList = _brandLogic.GetDropDown();
+         CarViewModel.FuelList = _brandLogic.GetDropDown();
+
+         return View(CarViewModel);
         }
 
         #region Calls

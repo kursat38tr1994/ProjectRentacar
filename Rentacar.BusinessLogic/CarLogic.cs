@@ -18,6 +18,14 @@ namespace Rentacar.BusinessLogic
             _mapper = mapper;
         }
 
+        public CarDto GetFirstOfDefault(int? id)
+         {
+             var obj = _unitOfWork.Car.GetFirstOrDefault(u => u.Id == id);
+
+             return _mapper.Map<CarDto>(obj);
+         }
+        
+        
         public IEnumerable<CarDto> GetAll()
         {
             var obj = _unitOfWork.Car.GetAll();

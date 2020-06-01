@@ -2,7 +2,7 @@
 using Rentacar.DataAccess.Dto.CarDto;
 using Rentacar.Models;
 
-namespace Rentacar.DataAccess.Data.Profiles
+namespace Rentacar.DataAccess.Profiles
 {
     public class CarProfile : Profile
     {

@@ -1,0 +1,23 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="container row">
+    <div class="col-12 text-center">
+        <h1 class="text-primary text-center">Het huren van de auto is gelukt</h1><br />
+        <img src="~/images/lawn_leaf.jpg" width="50%" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <br />
+        Dank u voor het huren van de auto <br />
+        [Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.]
+        <br />
+        Uw Order Id =: @Model;
+    </div>
+</div>
+

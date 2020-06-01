@@ -12,5 +12,6 @@ namespace Rentacar.BusinessLogic
         CarDto Upsert(CarDto carDto);
 
         CarDto Delete(int? id);
+        CarDto GetFirstOfDefault(int? id);
     }
 }

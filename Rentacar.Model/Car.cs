@@ -11,15 +11,21 @@ namespace Rentacar.Models
         [Key]
         public int Id { get; set; }
 
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string LicensePlate { get; set; }
+
+        
         [Required]
         public int BrandId { get; set; }
 
         [ForeignKey("BrandId")]
         public Brand Brand { get; set; }
 
-        [Required]
-        public string LicensePlate { get; set; }
 
+        [Required]
         public int FuelId { get; set; }
 
         [ForeignKey("FuelId")]
@@ -31,5 +37,7 @@ namespace Rentacar.Models
 
         [Required]
         public bool Availability { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }

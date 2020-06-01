@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using Rentacar.DataAccess.Dto.FuelDto;
+using Rentacar.DataAccess.Dto.ShoppingCartDto;
 using Rentacar.Models;
 
 namespace Rentacar.DataAccess.Profiles

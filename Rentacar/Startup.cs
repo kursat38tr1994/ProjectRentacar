@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Rentacar.Models;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +19,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rentacar.Areas.Admin.Service;
 using Rentacar.BusinessLogic;
+using Rentacar.BusinessLogic.IdentityLogic;
+using Rentacar.BusinessLogic.IdentityLogic.Interfaces;
 using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess;
 using Rentacar.DataAccess.Data;
@@ -38,15 +43,17 @@ namespace Rentacar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ApplicationDbContext>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer( Configuration.GetConnectionString("DefaultConnection"))
+                );
+            
             services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
-                .AddDefaultUI()
-                .AddDefaultTokenProviders();
-
+                .AddDefaultUI();
+            
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 3;
@@ -54,12 +61,28 @@ namespace Rentacar
             });
 
             
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             
+            
+            
+          // services.AddScoped<IRolesLogic, RolesLogic>();
+          //// services.AddScoped<IRolesLogic, RolesLogic>();
+          services.AddTransient<IRegisterLogic, RegisterLogic>();
+          services.AddTransient<IFactory, Factory>();
+           services.AddTransient<IRolesLogic, RolesLogic>();
             services.AddScoped<IBrandLogic, BrandLogic>();
             services.AddScoped<ICarLogic, CarLogic>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFuelLogic, FuelLogic>();
             services.AddScoped<ILogger, Logger<Car>>();
+            services.AddScoped<ILoginLogic, LoginLogic>();
+            
+            //services.AddScoped<IShoppingCartLogic, IShoppingCartLogic>();
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -81,6 +104,13 @@ namespace Rentacar
                     p.RequireRole(SD.Admin);
                 });
             });
+
+            // services.AddMvc(options =>
+            // {
+            //     var policy = new AuthorizationPolicyBuilder()
+            //         .RequireAuthenticatedUser().Build();
+            //     options.Filters.Add(new AuthorizeFilter(policy));
+            // }).AddXmlSerializerFormatters();
         }
 
         // This method gets called by the runtime. Use this method to  configure the HTTP request pipeline.
@@ -99,7 +129,7 @@ namespace Rentacar
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();

@@ -1,0 +1,135 @@
+﻿@model Rentacar.Areas.Customer.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<form method="post">
+    <br/>
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-primary text-light ml-0 row container">
+                    <div class="col-6">
+                        @* <i class="fa fa-shopping-cart"></i> &nbsp; *@
+                        <h1> Besteloverzicht </h1>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn" style="font-size: 20px; margin-top: 6px;">Terug naar de winkelmand</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Klanten Gegevens:</span>
+                                    </h4>
+                                    <h5 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span lass="text-info"> Vul hier uw gegevens in, of update uw account gegevens: <a asp-area="Customer" asp-controller="CustomerUser" asp-action="ChangeProfile">Account Updaten</a></span>
+                                    </h5><br/>
+                                
+
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Naam:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Rent.User.Firstname" type="text" class="form-control"/>
+                                        <span asp-validation-for="Rent.User.Firstname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Achternaam:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Rent.User.Surname" type="text" class="form-control"/>
+                                        <span asp-validation-for="Rent.User.Surname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Adres:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Rent.User.Address"type="text" class="form-control"/>
+                                        <span asp-validation-for="Rent.User.Address" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Postcode:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Rent.User.Postalcode" type="text" class="form-control"/>
+                                        <span asp-validation-for="Rent.User.Postalcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Woonplaats:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Rent.User.Residence" type="text" class="form-control"/>
+                                        <span asp-validation-for="Rent.User.Residence" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Huisnummer:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Rent.User.Housenumber" type="text" class="form-control"/>
+                                        <span asp-validation-for="Rent.User.Housenumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Besteloverzicht:</span>
+                                </h4>
+                                <ul class="list-group mb-3">
+                                    @foreach (var details in Model.ListCart)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="my-0">@details.Car.LicensePlate</h6>
+                                                @* <small class="text-muted">Quantity: --COUNT--</small> *@
+                                            </div>
+                                            <span class="text-muted">€@details.Price</span>
+                                        </li>
+                                    }
+                                    <li class="list-group-item d-flex justify-content-between bg-light">
+                                        <small class="text-info">Totaal (EUR)</small>
+                                        <strong class="text-info">€@Model.Rent.Total</strong>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        @* <div class="col-12 col-md-8 pt-2"> *@
+                        @*     <p style="color:maroon; font-size:14px;">Estimate Arrival Date: @DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()</p> *@
+                        @* </div> *@
+                        <div class="col-12 col-md-4">
+
+                            <button type="submit" value="Plaats Bestelling" class="btn btn-success form-control">Plaats Bestelling</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}

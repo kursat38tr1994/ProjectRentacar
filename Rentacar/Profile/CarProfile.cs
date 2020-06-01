@@ -12,8 +12,14 @@ namespace Rentacar.Areas.Admin.Profile
     {
         public CarProfile()
         {
+            //Admin Area
             CreateMap<CarViewModel, CarDto>();
             CreateMap<CarDto, CarViewModel>();
+            
+            //Customer Area
+            CreateMap<Customer.ViewModels.CarViewModel, CarDto>();
+            CreateMap<CarDto, Customer.ViewModels.CarViewModel>();
+            
         }
     }
 }

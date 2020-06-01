@@ -25,5 +25,6 @@ namespace Rentacar.DataAccess.Data.Repository.IRepository
 
         void Remove(int id);
         void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entity);
     }
 }

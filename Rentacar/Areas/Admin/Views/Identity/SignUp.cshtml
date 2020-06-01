@@ -1,4 +1,5 @@
 ﻿@using System.Net.Mime
+@using System.Runtime.CompilerServices
 @using Microsoft.AspNetCore.Identity
 @model Rentacar.Areas.Admin.ViewModels.SignUpViewModel
 @using Rentacar.Utility
@@ -6,61 +7,117 @@
 @{
     ViewData["Title"] = "SignUp";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var roles = new List<string> {"Memeer", "Admin"};
 }
 
-<h1>SignUp</h1>
 
-<h4>SignUpViewModel</h4>
-<hr/>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="SignUp" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+<div class="py-4 my-4">
+    <div asp-validation-for="All" class="text-danger"></div>
+    <div class="row form-group">
+        <div class="col-8 offset-2">
+            <div class="card">
+                <div class="card-body px-lg-5 pt-4">
+                    <form autocomplete="off" asp-action="SignUp" method="post">
+                        <h3 class="col-12 text-success text-center py-4">
+                            @if (User.IsInRole(SD.Admin) || User.IsInRole(SD.Employee))
+                            {
+                                <strong>Maak een nieuwe Account</strong>
+                            }
+                            else
+                            {
+                                <strong>Registreren</strong>
+                            }
+                        </h3>
+                        <hr/>
+                        <div class="py-2">
+                            <input asp-for="Email" type="email" placeholder="Email" class="form-control"/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="py-2">
+                            <input asp-for="PasswordHash" type="password" placeholder="Wachtwoord" class="form-control"/>
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+                        @* <div class="py-2"> *@
+                        @*     <input asp-for="ConfirmPassword" type="password" placeholder="Herhaal Wachtwoord" class="form-control"/> *@
+                        @*     <span asp-validation-for="ConfirmPassword" class="text-danger"></span> *@
+                        @* </div> *@
+
+                        @* @if(User.IsInRole(SD.Admin)){ *@
+                            <div class="form-group">
+                                <label asp-for="Role"></label>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                                @Html.DropDownListFor(m => m.Role, Model.RoleList, "Kies hier een Role", new {@class = "form-control"})
+                            </div>
+                        @* } *@
+                        @* <div class="form-group"> *@
+                        @*     <label asp-for="Role"></label> *@
+                        @*     @Html.DropDownListFor(m => m.Role, Model.RoleList, "Kies hier een Role", new {@class = "form-control"}) *@
+                        @* </div> *@
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="py-4">
+                            <input type="submit" value="Registreren" class="btn btn-primary form-control"/>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-@*              @if (User.IsInRole(SD.Admin)) *@
-@*              { *@
-@*                  *@
-@*              } *@
-             
-             
-              <div class="form-group">
-                                  <label asp-for="Role"></label>
-                                  @Html.DropDownListFor(m => m.Role, Model.RoleList, "Kies hier een Role", new {@class ="form-control"})
-                              </div>
-             @* <div class="form-group row"> *@
-            @*     $1$ <div class="col-4"></div> #1# *@
-            @*     <div class="col-12"> *@
-            @*         | *@
-            @*         <input type="radio" name="rdUserRole" value="@SD.Admin" />@SD.Admin *@
-            @*         $1$ <input type="radio" name="rdUserRole" value="@SD.User" />@SD.User #1# *@
-            @*         <input type="radio" name="rdUserRole" value="@SD.Employee" />@SD.Employee *@
-            @*     </div> *@
-            @* </div> *@
-@*             @if (User.IsInRole(SD.Admin)) *@
-@*             { *@
-@* *@
-@*             } *@
-            @* <div class="form-group"> *@
-            @*     <label asp-for="Role"></label> *@
-            @*     @Html.DropDownListFor(x => x.RoleList, _UserManager.Roles.Where(u => u.Email != SD.User).Select(x => x.Email).Select(i => new SelectListItem {Text = i, Value = i}))); *@
-            @* </div> *@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="SignIn">Back to List</a>
-</div>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}
+
+@* <hr/> *@
+@* <div class="row"> *@
+@*     <div class="col-md-4"> *@
+@*         <form asp-action="SignUp" method="post"> *@
+@*             <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="Email" class="control-label"></label> *@
+@*                 <input asp-for="Email" class="form-control"/> *@
+@*                 <span asp-validation-for="Email" class="text-danger"></span> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="Password" class="control-label"></label> *@
+@*                 <input asp-for="Password" class="form-control"/> *@
+@*                 <span asp-validation-for="Password" class="text-danger"></span> *@
+@*             </div> *@
+@*             $1$              @if (User.IsInRole(SD.Admin)) #1# *@
+@*             $1$              { #1# *@
+@*             $1$                  #1# *@
+@*             $1$              } #1# *@
+@* *@
+@* *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="Role"></label> *@
+@*                 @Html.DropDownListFor(m => m.Role, Model.RoleList, "Kies hier een Role", new {@class = "form-control"}) *@
+@*             </div> *@
+@*             $1$ <div class="form-group row"> #1# *@
+@*             $1$     $2$ <div class="col-4"></div> #2# #1# *@
+@*             $1$     <div class="col-12"> #1# *@
+@*             $1$         | #1# *@
+@*             $1$         <input type="radio" name="rdUserRole" value="@SD.Admin" />@SD.Admin #1# *@
+@*             $1$         $2$ <input type="radio" name="rdUserRole" value="@SD.User" />@SD.User #2# #1# *@
+@*             $1$         <input type="radio" name="rdUserRole" value="@SD.Employee" />@SD.Employee #1# *@
+@*             $1$     </div> #1# *@
+@*             $1$ </div> #1# *@
+@*             $1$             @if (User.IsInRole(SD.Admin)) #1# *@
+@*             $1$             { #1# *@
+@*             $1$ #1# *@
+@*             $1$             } #1# *@
+@*             $1$ <div class="form-group"> #1# *@
+@*             $1$     <label asp-for="Role"></label> #1# *@
+@*             $1$     @Html.DropDownListFor(x => x.RoleList, _UserManager.Roles.Where(u => u.Email != SD.User).Select(x => x.Email).Select(i => new SelectListItem {Text = i, Value = i}))); #1# *@
+@*             $1$ </div> #1# *@
+@*             <div class="form-group"> *@
+@*                 <input type="submit" value="Create" class="btn btn-primary"/> *@
+@*             </div> *@
+@*         </form> *@
+@*     </div> *@
+@* </div> *@
+
+@* <div> *@
+@*     <a asp-action="SignIn">Back to List</a> *@
+@* </div> *@
