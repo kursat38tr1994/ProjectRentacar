@@ -44,7 +44,7 @@ namespace Rentacar.DataAccess.Migrations
                     Firstname = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    Recidence = table.Column<string>(nullable: true),
+                    Residence = table.Column<string>(nullable: true),
                     Postalcode = table.Column<string>(nullable: true),
                     Housenumber = table.Column<string>(nullable: true)
                 },
@@ -186,16 +186,41 @@ namespace Rentacar.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: false),
+                    RentDate = table.Column<DateTime>(nullable: false),
+                    ReturnDate = table.Column<DateTime>(nullable: false),
+                    Total = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rent_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Car",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    LicensePlate = table.Column<string>(nullable: true),
                     BrandId = table.Column<int>(nullable: false),
-                    LicensePlate = table.Column<string>(nullable: false),
                     FuelId = table.Column<int>(nullable: false),
                     CurrentPrice = table.Column<double>(nullable: false),
-                    Availability = table.Column<bool>(nullable: false)
+                    Availability = table.Column<bool>(nullable: false),
+                    ImageUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -212,6 +237,60 @@ namespace Rentacar.DataAccess.Migrations
                         principalTable: "Fuel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RentDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RentId = table.Column<int>(nullable: false),
+                    CarId = table.Column<int>(nullable: false),
+                    Price = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RentDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RentDetail_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RentDetail_Rent_RentId",
+                        column: x => x.RentId,
+                        principalTable: "Rent",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: true),
+                    CarId = table.Column<int>(nullable: false),
+                    Count = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCart_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCart_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -262,6 +341,31 @@ namespace Rentacar.DataAccess.Migrations
                 name: "IX_Car_FuelId",
                 table: "Car",
                 column: "FuelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rent_UserId",
+                table: "Rent",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentDetail_CarId",
+                table: "RentDetail",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentDetail_RentId",
+                table: "RentDetail",
+                column: "RentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCart_CarId",
+                table: "ShoppingCart",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCart_UserId",
+                table: "ShoppingCart",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -282,10 +386,19 @@ namespace Rentacar.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "RentDetail");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCart");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Rent");
+
+            migrationBuilder.DropTable(
+                name: "Car");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
