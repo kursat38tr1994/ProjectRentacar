@@ -48,7 +48,7 @@ namespace Rentacar.Areas.Customer.Controllers
 
             IEnumerable<Rent> rent;
             
-            if (User.IsInRole(SD.Admin) || User.IsInRole(SD.Employee))
+            if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employee))
             {
                 rent = _unitOfWork.Rent.GetAll(includeProperties:"User");
             }

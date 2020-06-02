@@ -1,4 +1,6 @@
-﻿using Rentacar.BusinessLogic.IdentityLogic.Interfaces;
+﻿using Rentacar.BusinessLogic.IdentityLogic;
+using Rentacar.BusinessLogic.IdentityLogic.Interfaces;
+using Rentacar.Models;
 
 namespace Rentacar.BusinessLogic
 {
@@ -6,5 +8,6 @@ namespace Rentacar.BusinessLogic
     {
         IRegisterLogic Register { get; }
         ILoginLogic Login { get; }
+        ILogOut LogOut { get; }
     }
 }

@@ -31,9 +31,12 @@ namespace Rentacar.BusinessLogic
 
             Register = new RegisterLogic( _userManager, _mapper, _userInManager, _rolesLogic);
             Login = new LoginLogic(_userInManager);
+            LogOut = new LogOut(_userInManager);
         }
 
         public IRegisterLogic Register { get; private set; }
         public ILoginLogic Login { get; private set; }
+        public ILogOut LogOut { get; private set; }
+
     }
 }

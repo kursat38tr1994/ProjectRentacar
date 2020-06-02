@@ -16,7 +16,7 @@ using Rentacar.Utility;
 namespace Rentacar.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public class UserController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

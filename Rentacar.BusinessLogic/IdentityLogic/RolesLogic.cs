@@ -20,20 +20,20 @@ namespace Rentacar.BusinessLogic.IdentityLogic
         
         public void RolesCheck()
         {
-         
-            if ( _roleManager.RoleExistsAsync(SD.Admin) == null)
+
+            if (_roleManager.RoleExistsAsync(Roles.Admin) != null)
             {
-                 _roleManager.CreateAsync(new IdentityRole(SD.Admin));
+                 _roleManager.CreateAsync(new IdentityRole(Roles.Admin));
             }
 
-            if ( _roleManager.RoleExistsAsync(SD.Employee) == null)
+            if ( _roleManager.RoleExistsAsync(Roles.Employee) != null)
             {
-                 _roleManager.CreateAsync(new IdentityRole(SD.Employee));
+                 _roleManager.CreateAsync(new IdentityRole(Roles.Employee));
             }
 
-            if ( _roleManager.RoleExistsAsync(SD.User) == null)
+            if ( _roleManager.RoleExistsAsync(Roles.User) != null)
             { 
-                _roleManager.CreateAsync(new IdentityRole(SD.User));
+                _roleManager.CreateAsync(new IdentityRole(Roles.User));
             }
             
         }
@@ -43,7 +43,7 @@ namespace Rentacar.BusinessLogic.IdentityLogic
         {
             if (user.Role == null)
             {
-                await _userManager.AddToRoleAsync(user, SD.User);
+                await _userManager.AddToRoleAsync(user, Roles.User);
             }
             else
             {

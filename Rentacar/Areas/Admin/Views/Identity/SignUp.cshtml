@@ -18,7 +18,7 @@
                 <div class="card-body px-lg-5 pt-4">
                     <form autocomplete="off" asp-action="SignUp" method="post">
                         <h3 class="col-12 text-success text-center py-4">
-                            @if (User.IsInRole(SD.Admin) || User.IsInRole(SD.Employee))
+                            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employee))
                             {
                                 <strong>Maak een nieuwe Account</strong>
                             }

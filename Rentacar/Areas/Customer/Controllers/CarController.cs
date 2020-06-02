@@ -50,7 +50,7 @@ namespace Rentacar.Controllers
             {
                 var count = _unitOfWork.ShoppingCart.GetAll(c => c.UserId == claim.Value).ToList().Count();
                 
-                HttpContext.Session.SetInt32(SD.SessionCart, count);
+                HttpContext.Session.SetInt32(Session.SessionCart, count);
             }
             return View(mapper);
         }
@@ -102,7 +102,7 @@ namespace Rentacar.Controllers
 
                 var count = _unitOfWork.ShoppingCart.GetAll(c => c.UserId == CartObject.UserId).ToList().Count;
                 
-                HttpContext.Session.SetInt32(SD.SessionCart, count);
+                HttpContext.Session.SetInt32(Session.SessionCart, count);
                 
                 return RedirectToAction(nameof(Index));
             }

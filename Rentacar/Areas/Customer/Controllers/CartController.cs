@@ -58,7 +58,7 @@ namespace Rentacar.Areas.Customer.Controllers
             
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
-            HttpContext.Session.SetInt32(SD.SessionCart, cnt - 1);
+            HttpContext.Session.SetInt32(Session.SessionCart, cnt - 1);
 
             return RedirectToAction(nameof(Index));
         }
@@ -120,7 +120,7 @@ namespace Rentacar.Areas.Customer.Controllers
             _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartViewModel.ListCart);
             _unitOfWork.Save();
             
-            HttpContext.Session.SetInt32(SD.SessionCart, 0);
+            HttpContext.Session.SetInt32(Session.SessionCart, 0);
 
             return RedirectToAction("OrderConfirmation", "Cart", new {id = ShoppingCartViewModel.Rent.Id});
         }

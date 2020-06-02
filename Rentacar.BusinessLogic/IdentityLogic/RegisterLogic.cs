@@ -28,7 +28,7 @@ namespace Rentacar.BusinessLogic.IdentityLogic
 
         public async Task<User> SignUp(User model)
         {
-            _rolesLogic.RolesCheck();
+           _rolesLogic.RolesCheck();
 
             if (await _userManager.FindByEmailAsync(model.Email) == null)
             {

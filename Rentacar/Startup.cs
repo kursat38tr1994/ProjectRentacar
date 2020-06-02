@@ -81,7 +81,8 @@ namespace Rentacar
             services.AddScoped<IFuelLogic, FuelLogic>();
             services.AddScoped<ILogger, Logger<Car>>();
             services.AddScoped<ILoginLogic, LoginLogic>();
-            
+            services.AddScoped<ILogOut, LogOut>();
+
             //services.AddScoped<IShoppingCartLogic, IShoppingCartLogic>();
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -101,7 +102,7 @@ namespace Rentacar
             {
                 options.AddPolicy("Admin", p =>
                 {
-                    p.RequireRole(SD.Admin);
+                    p.RequireRole(Roles.Admin);
                 });
             });
 

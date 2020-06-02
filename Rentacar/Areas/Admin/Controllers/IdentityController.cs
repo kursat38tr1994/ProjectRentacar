@@ -57,7 +57,7 @@ namespace Rentacar.Areas.Admin.Controllers
             // ReturnUrl = returnUrl
             SignUpViewModel = new SignUpViewModel
             {
-                RoleList =  _roleManager.Roles.Where(u => u.Name != SD.User).Select(i => new SelectListItem
+                RoleList =  _roleManager.Roles.Where(u => u.Name != Roles.User).Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Name
@@ -140,8 +140,9 @@ namespace Rentacar.Areas.Admin.Controllers
 
         public async Task<IActionResult> LogOut()
         {
-            HttpContext.Session.SetInt32(SD.SessionCart, 0);
-            await _signInManager.SignOutAsync();
+             _factory.LogOut.LogOutUser();
+            HttpContext.Session.SetInt32(Session.SessionCart, 0);
+            //await _signInManager.SignOutAsync();
             return RedirectToAction("SignIn");
         }
     }
