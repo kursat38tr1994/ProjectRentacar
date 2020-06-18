@@ -1,7 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Rentacar.BusinessLogic.IdentityLogic.Interfaces;
 using Rentacar.DataAccess.Dto.UserDto;
 using Rentacar.Models;
@@ -28,7 +30,6 @@ namespace Rentacar.BusinessLogic.IdentityLogic
 
         public async Task<User> SignUp(User model)
         {
-           _rolesLogic.RolesCheck();
 
             if (await _userManager.FindByEmailAsync(model.Email) == null)
             {
@@ -50,7 +51,9 @@ namespace Rentacar.BusinessLogic.IdentityLogic
 
                     return model;
                 }
-                return model;
+
+               var sa =  result.Errors.Select(a => a.Description);
+
             }
             return model;
         }

@@ -65,5 +65,20 @@ namespace Rentacar.Areas.Admin.Controllers
         {
             return Json(new {data = _fuelLogic.GetAll()});
         }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var obj = _fuelLogic.GetById(id);
+
+            if (obj == null)
+            {
+                return Json(new { success = false, message = "Probleem bij deleten" });
+            }
+
+            _fuelLogic.Delete(obj.Id);
+
+            return Json(new { success = true, message = $"Deleten is gelukt {obj}" });
+        }
     }
 }

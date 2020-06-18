@@ -13,5 +13,6 @@ namespace Rentacar.BusinessLogic
 
         CarDto Delete(int? id);
         CarDto GetFirstOfDefault(int? id);
+        void ChangeAvailability(CarDto carModel);
     }
 }

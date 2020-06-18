@@ -9,11 +9,13 @@ namespace Rentacar.BusinessLogic.Rent
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICarLogic _carLogic;
 
-        public RentDetailsLogic(IUnitOfWork unitOfWork, IMapper mapper)
+        public RentDetailsLogic(IUnitOfWork unitOfWork, IMapper mapper, ICarLogic carLogic)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _carLogic = carLogic;
         }
 
         
@@ -23,9 +25,9 @@ namespace Rentacar.BusinessLogic.Rent
             var rentDetails = _mapper.Map<RentDetails>(model);
             
             _unitOfWork.RentDetails.Add(rentDetails);
-            
+
             _unitOfWork.Save();
-            
+
             return model;
         }
     }

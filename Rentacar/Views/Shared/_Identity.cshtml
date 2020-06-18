@@ -1,28 +1,4 @@
-﻿@* @{ *@
-@*     var LoggedIn = User.Identity.IsAuthenticated; *@
-@* } *@
-@* *@
-@* @if (LoggedIn) *@
-@* { *@
-@*     <li class="nav-item"> *@
-@*         <a class="nav-link " asp-area="Admin" asp-controller="Identity" asp-action="LogOut">Uitloggen</a> *@
-@*     </li> *@
-@* *@
-@*     <li class="nav-item"> *@
-@*         <a class="nav-link" asp-area="Admin" asp-page="/Account/Manage/Index" title="Manage">Hallo @User.Identity.Name!</a> *@
-@*     </li> *@
-@* } *@
-@* else *@
-@* { *@
-@*     <li class="nav-item"> *@
-@*         <a class="nav-link " asp-area="Admin" asp-action="SignUp">Register</a> *@
-@*     </li> *@
-@*     <li class="nav-item"> *@
-@*         <a class="nav-link" asp-area="Admin" asp-action="SignIn">Inloggen</a> *@
-@*     </li> *@
-@* } *@
-
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 

@@ -24,5 +24,13 @@ namespace Rentacar.DataAccess.Data.Repository
         {
             _db.Update(obj);
         }
+
+        public int ReturnLast()
+        {
+            //Use your context or DbSet here to return the data.
+            //You are using .Last() but I'm not sure if that gets what you want.
+            var LastRent = dbSet.ToList().Last();
+            return LastRent.Id;
+        }
     }
 }

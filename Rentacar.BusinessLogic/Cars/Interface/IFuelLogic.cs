@@ -10,5 +10,6 @@ namespace Rentacar.BusinessLogic.Interface
         FuelDto GetById(int? id);
         IEnumerable<FuelDto> GetAll();
         IEnumerable<SelectListItem> GetDropDown();
+        FuelDto Delete(int? id);
     }
 }

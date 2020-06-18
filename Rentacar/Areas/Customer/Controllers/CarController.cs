@@ -25,100 +25,59 @@ namespace Rentacar.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICarLogic _carLogic;
         private readonly IMapper _mapper;
+
+        private readonly IBrandLogic _brandLogic;
         //private readonly IShoppingCartLogic _shoppingCartLogic;
 
-        [BindProperty] public ShoppingCartViewModel ShoppingCartViewModel { get; set; }
+        [BindProperty] private ShoppingCartViewModel ShoppingCartViewModel { get; set; }
 
-        public CarController(IUnitOfWork unitOfWork, ICarLogic carLogic, IMapper mapper)
+        public CarController(IUnitOfWork unitOfWork, ICarLogic carLogic, IMapper mapper, IBrandLogic brandLogic)
         {
             _unitOfWork = unitOfWork;
             _carLogic = carLogic;
             _mapper = mapper;
+            _brandLogic = brandLogic;
             //_shoppingCartLogic = shoppingCartLogic;
         }
         
         // GET
         public IActionResult Index()
         {
-            IEnumerable<CarDto> cars = _carLogic.GetAll();
-            var mapper = _mapper.Map<IEnumerable<CarViewModel>>(cars);
             
-            var claims = (ClaimsIdentity) User.Identity;
-            var claim = claims.FindFirst(ClaimTypes.NameIdentifier);
-            
-            if (claim != null)
+            var model = new CarViewModel()
             {
-                var count = _unitOfWork.ShoppingCart.GetAll(c => c.UserId == claim.Value).ToList().Count();
-                
-                HttpContext.Session.SetInt32(Session.SessionCart, count);
-            }
-            return View(mapper);
+                Cars = _carLogic.GetAll(),
+                Brands = _brandLogic.GettAll()
+            };
+            
+            return View(model);
         }
         
         public IActionResult Details(int? id)
         {
-
-            var carFromDb = _unitOfWork.Car.GetFirstOrDefault(u => u.Id == id, includeProperties:"Brand,Fuel");
-
-            ShoppingCartViewModel = new ShoppingCartViewModel()
-            {
-                Car = carFromDb,
-                CarId = carFromDb.Id
-            };
-            //var carFromDb = _carLogic.GetFirstOfDefault(id);
-            //  var mapper = _mapper.Map<ShoppingCartDto>(carFromDb);
-            // IEnumerable<CarDto> cars = _carLogic.GetAll();
-            // var mapper = _mapper.Map<IEnumerable<CarViewModel>>(cars);
-            // return View(mapper);
-
-            return View(_mapper.Map<ShoppingCartViewModel>(ShoppingCartViewModel));
+            var carFromDb = _carLogic.GetFirstOfDefault(id);
+            return View(_mapper.Map<CarViewModel>(carFromDb));
         }
-        
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public IActionResult Details(ShoppingCart CartObject)
+        public IActionResult AddToCart(int carId)
         {
-            CartObject.Id = 0;
-            if (ModelState.IsValid)
+            var sessionList = new List<int>();
+
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(Session.SessionCart)))
             {
-                var claims = (ClaimsIdentity) User.Identity;
-                var claim = claims.FindFirst(ClaimTypes.NameIdentifier);
-                CartObject.UserId = claim.Value;
-
-
-                var cartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(u =>
-                    u.UserId == CartObject.UserId && u.CarId == CartObject.CarId, includeProperties:"Car");
-
-                var mapper = _mapper.Map<ShoppingCart>(cartFromDb);
-                ShoppingCart cartViewModel = mapper;
-
-                if (cartViewModel == null)
-                {
-                    _unitOfWork.ShoppingCart.Add(_mapper.Map<ShoppingCart>(CartObject));
-                }
-                _unitOfWork.Save();
-
-                var count = _unitOfWork.ShoppingCart.GetAll(c => c.UserId == CartObject.UserId).ToList().Count;
-                
-                HttpContext.Session.SetInt32(Session.SessionCart, count);
-                
-                return RedirectToAction(nameof(Index));
+                sessionList.Add(carId);
+                HttpContext.Session.SetObject(Session.SessionCart, sessionList);
             }
             else
             {
-                var carFromDb = _unitOfWork.Car.GetFirstOrDefault(u => u.Id == CartObject.CarId, includeProperties:"Brand,Fuel");
-
-                ShoppingCart shoppingCart= new ShoppingCart()
+                sessionList = HttpContext.Session.GetObject<List<int>>(Session.SessionCart);
+                if (!sessionList.Contains(carId))
                 {
-                    Car = carFromDb,
-                    CarId = carFromDb.Id
-                };
-
-                return View(_mapper.Map<ShoppingCartViewModel>(shoppingCart));
+                    sessionList.Add(carId);
+                    HttpContext.Session.SetObject(Session.SessionCart, sessionList);
+                }
             }
-            
+            return RedirectToAction(nameof(Index));
         }
 
     }

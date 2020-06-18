@@ -22,12 +22,15 @@ using Rentacar.BusinessLogic;
 using Rentacar.BusinessLogic.IdentityLogic;
 using Rentacar.BusinessLogic.IdentityLogic.Interfaces;
 using Rentacar.BusinessLogic.Interface;
+using Rentacar.BusinessLogic.Order;
+using Rentacar.BusinessLogic.Rent;
 using Rentacar.DataAccess;
 using Rentacar.DataAccess.Data;
 using Rentacar.DataAccess.Data.Repository.IRepository;
 using Rentacar.DataAccess.Data.Repository;
 using Rentacar.Utility;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
+using Rentacar.DataAccess.DbInitializer;
 
 namespace Rentacar
 {
@@ -43,16 +46,23 @@ namespace Rentacar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ApplicationDbContext>();
+
+            services.AddScoped<ApplicationDbContext>();
+            services.AddScoped<ApplicationDbContext>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer( Configuration.GetConnectionString("DefaultConnection"))
-                );
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+            });
+               
             
-            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ApplicationDbContext>()    
                 .AddDefaultTokenProviders()
                 .AddDefaultUI();
+                
             
             services.Configure<IdentityOptions>(options =>
             {
@@ -72,16 +82,22 @@ namespace Rentacar
             
           // services.AddScoped<IRolesLogic, RolesLogic>();
           //// services.AddScoped<IRolesLogic, RolesLogic>();
-          services.AddTransient<IRegisterLogic, RegisterLogic>();
-          services.AddTransient<IFactory, Factory>();
-           services.AddTransient<IRolesLogic, RolesLogic>();
+          services.AddScoped<IRegisterLogic, RegisterLogic>();
+          services.AddScoped<IFactory, Factory>();
+           services.AddScoped<IRolesLogic, RolesLogic>();
             services.AddScoped<IBrandLogic, BrandLogic>();
             services.AddScoped<ICarLogic, CarLogic>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IFuelLogic, FuelLogic>();
             services.AddScoped<ILogger, Logger<Car>>();
             services.AddScoped<ILoginLogic, LoginLogic>();
             services.AddScoped<ILogOut, LogOut>();
+            services.AddScoped<IUserDetails, UserDetails>();
+            services.AddScoped<IRentDetailsLogic, RentDetailsLogic>();
+            services.AddScoped<IRentLogic, RentLogic>();
+            services.AddScoped<IOrderLogic, OrderLogic>();
+
 
             //services.AddScoped<IShoppingCartLogic, IShoppingCartLogic>();
             services.AddControllersWithViews().AddNewtonsoftJson();
@@ -115,7 +131,7 @@ namespace Rentacar
         }
 
         // This method gets called by the runtime. Use this method to  configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -135,7 +151,7 @@ namespace Rentacar
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            dbInitializer.Initializer();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

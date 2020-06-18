@@ -13,7 +13,6 @@ namespace Rentacar.BusinessLogic.IdentityLogic
     public class LoginLogic : ILoginLogic
     {
         private readonly SignInManager<User> _signInManager;
-        private readonly IUnitOfWork _unitOfWork;
 
         public LoginLogic(SignInManager<User> signInManager)
         {
@@ -21,16 +20,15 @@ namespace Rentacar.BusinessLogic.IdentityLogic
        
         }
         
-        
-        public async Task<User> Login(User model)
+        public async Task<bool> Login(User model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.PasswordHash, false, false);
 
             if (result.Succeeded)
             {
-                return model;
+                return true;
             }
-            return model;
+            return false;
         }
         
     }

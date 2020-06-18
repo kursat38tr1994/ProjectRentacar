@@ -1,4 +1,53 @@
-﻿@model Rentacar.Areas.Customer.ViewModels.ShoppingCartViewModel
+﻿@* @model Rentacar.Areas.Customer.ViewModels.ShoppingCartViewModel *@
+@* *@
+@* @{ *@
+@*     ViewBag.Title = "title"; *@
+@*     Layout = "_Layout"; *@
+@* } *@
+@* *@
+@* *@
+@* <form method="post"> *@
+@*     <br/> *@
+@*     @if (Model.ListCar.Count > 0) *@
+@*     { *@
+@*         <div class="backgroundWhiteBorder"> *@
+@*             <div class="container"> *@
+@*                 <div class="card"> *@
+@*                     <div class="card-header bg-primary text-light ml-0 row container"> *@
+@*                         <div class="col-6"> *@
+@*                             <h1> Overzicht </h1> *@
+@*                         </div> *@
+@*                         <div class="col-6 text-right"> *@
+@*                             <h3> *@
+@*                                 <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn" style="font-size: 20px; margin-top: 6px;">Terug naar Winkelmand</a> *@
+@*                             </h3> *@
+@*                         </div> *@
+@*                     </div> *@
+@* *@
+@*                     <div class="card-body"> *@
+@*                         <div class="container rounded p-2"></div> *@
+@* *@
+@*                     </div> *@
+@*                      *@
+@*                     <div class="card-footer"> *@
+@*                         <div class="card-footer row"> *@
+@*                             <div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 "> *@
+@*                                 <a asp-area="Customer" asp-controller="Cart" asp-action="Summary" class="btn btn-success form-control">Overzicht</a> *@
+@*                             </div> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*         <div> *@
+@*             <h1>Geen Auto's in de winkelmand!</h1> *@
+@*         </div> *@
+@*     } *@
+@* </form> *@
+@model Rentacar.Areas.Customer.ViewModels.ShoppingCartViewModel
 
 @{
     ViewBag.Title = "title";
@@ -13,7 +62,6 @@
             <div class="card">
                 <div class="card-header bg-primary text-light ml-0 row container">
                     <div class="col-6">
-                        @* <i class="fa fa-shopping-cart"></i> &nbsp; *@
                         <h1> Besteloverzicht </h1>
                     </div>
                     <div class="col-6 text-right">
@@ -23,6 +71,7 @@
                 <div class="card-body">
                     <div class="container rounded p-2">
                         <div class="row">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="col-12 col-lg-6 pb-4">
                                 <div class="row">
                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -31,7 +80,7 @@
                                     <h5 class="d-flex justify-content-between align-items-center mb-3">
                                         <span lass="text-info"> Vul hier uw gegevens in, of update uw account gegevens: <a asp-area="Customer" asp-controller="CustomerUser" asp-action="ChangeProfile">Account Updaten</a></span>
                                     </h5><br/>
-                                
+
 
                                 </div>
                                 <div class="row my-1">
@@ -39,8 +88,8 @@
                                         <label>Naam:</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Rent.User.Firstname" type="text" class="form-control"/>
-                                        <span asp-validation-for="Rent.User.Firstname" class="text-danger"></span>
+                                        <input asp-for="User.Firstname" type="text" disabled class="form-control"/>
+                                        <span asp-validation-for="User.Firstname" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -48,8 +97,8 @@
                                         <label>Achternaam:</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Rent.User.Surname" type="text" class="form-control"/>
-                                        <span asp-validation-for="Rent.User.Surname" class="text-danger"></span>
+                                        <input asp-for="User.Surname" type="text" disabled class="form-control"/>
+                                        <span asp-validation-for="User.Surname" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -57,8 +106,8 @@
                                         <label>Adres:</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Rent.User.Address"type="text" class="form-control"/>
-                                        <span asp-validation-for="Rent.User.Address" class="text-danger"></span>
+                                        <input asp-for="User.Address"type="text" disabled class="form-control"/>
+                                        <span asp-validation-for="User.Address" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -66,8 +115,8 @@
                                         <label>Postcode:</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Rent.User.Postalcode" type="text" class="form-control"/>
-                                        <span asp-validation-for="Rent.User.Postalcode" class="text-danger"></span>
+                                        <input asp-for="User.Postalcode" type="text" disabled class="form-control"/>
+                                        <span asp-validation-for="User.Postalcode" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -75,8 +124,8 @@
                                         <label>Woonplaats:</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Rent.User.Residence" type="text" class="form-control"/>
-                                        <span asp-validation-for="Rent.User.Residence" class="text-danger"></span>
+                                        <input asp-for="User.Residence" type="text" disabled class="form-control"/>
+                                        <span asp-validation-for="User.Residence" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -84,8 +133,8 @@
                                         <label>Huisnummer:</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Rent.User.Housenumber" type="text" class="form-control"/>
-                                        <span asp-validation-for="Rent.User.Housenumber" class="text-danger"></span>
+                                        <input asp-for="User.Housenumber" type="text" disabled class="form-control"/>
+                                        <span asp-validation-for="User.Housenumber" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -94,21 +143,40 @@
                                     <span class="text-info">Besteloverzicht:</span>
                                 </h4>
                                 <ul class="list-group mb-3">
-                                    @foreach (var details in Model.ListCart)
-                                    {
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <div>
-                                                <h6 class="my-0">@details.Car.LicensePlate</h6>
-                                                @* <small class="text-muted">Quantity: --COUNT--</small> *@
-                                            </div>
-                                            <span class="text-muted">€@details.Price</span>
-                                        </li>
+                                    @{ var total = 0.0; }
+                                    @{
+                                        foreach (var car in Model.ListCar)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <div>
+                                                    <input type="hidden" asp-for="@car.Id"/>
+                                                    <h5 class="my-0">@car.Title</h5>
+                                                    <small class="text-muted">Merk:&nbsp; @car.Brand.Type</small>
+                                                </div>
+
+                                                <small class="text-info">Prijs:&nbsp; @($"{car.CurrentPrice:C}")</small>
+                                                @{ total += car.CurrentPrice; }
+                                            </li>
+                                        }
+
                                     }
                                     <li class="list-group-item d-flex justify-content-between bg-light">
                                         <small class="text-info">Totaal (EUR)</small>
-                                        <strong class="text-info">€@Model.Rent.Total</strong>
+                                        <strong class="text-info">@($"{total:C}")</strong>
                                     </li>
-
+                                    <br>
+                                    <div class="form-group row">
+                                        <label class="col-sm-5 col-form-label">Start Datum</label>
+                                        <div class="col-sm-10">
+                                            <input asp-for="RentDate" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-5 col-form-label">Eind Datum</label>
+                                        <div class="col-sm-10">
+                                            <input asp-for="RentDate" type="date" class="form-control">
+                                        </div>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -116,11 +184,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        @* <div class="col-12 col-md-8 pt-2"> *@
-                        @*     <p style="color:maroon; font-size:14px;">Estimate Arrival Date: @DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()</p> *@
-                        @* </div> *@
                         <div class="col-12 col-md-4">
-
                             <button type="submit" value="Plaats Bestelling" class="btn btn-success form-control">Plaats Bestelling</button>
                         </div>
                     </div>
@@ -129,7 +193,3 @@
         </div>
     </div>
 </form>
-@section Scripts
-{
-    <partial name="_ValidationScriptsPartial"/>
-}

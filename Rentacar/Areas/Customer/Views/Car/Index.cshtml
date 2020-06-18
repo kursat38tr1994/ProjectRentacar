@@ -1,26 +1,67 @@
-﻿@model IEnumerable<Rentacar.Areas.Customer.ViewModels.CarViewModel>
+﻿@model Rentacar.Areas.Customer.ViewModels.CarViewModel
 
 
-<div class="row pb-3 backgroundWhite">
-    @foreach(var car in Model){
-    <div class="col-lg-3 col-md-6">
-        <div class="row p-2">
-            <div class="col-12  p-1" style="border:1px solid #008cba; border-radius: 5px;">
-                <div class="card" style="border:0px;">
-                    <img src="https://via.placeholder.com/150" class="card-img-top rounded"/>
-                    <div class="pl-1">
-                        <p class="card-title h5"><b style="color:#2c3e50">Title</b></p>
-                    </div>
-                    
-                    <div style="padding-left:5px;">
-                        <p style="color:maroon">Prijs: <b class="">@car.CurrentPrice</b></p>
-                    </div>
-                </div>
-                <div >
-                    <a asp-action="Details" class="btn btn-primary form-control" asp-route-id="@car.Id">Details</a>
+<div class="row container pb-3">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="row my-3">
+                    @foreach (var car in Model.Cars)
+                    {
+                        <div class="col-lg-4 col-xl-3 col-md-6 pb-4">
+                            <div class="card" style="border:2px solid #78C2AD;border-radius:5px;)">
+                                <div class="pl-3 pt-1 text-center">
+                                    <h5 class="card-title">
+                                        <b>@car.Title</b>
+                                    </h5>
+                                </div>
+                                <hr/>
+                                <img src="@car.ImageUrl" class="card-img-top p-2 rounded"/>
+                                <div class="d-flex justify-content-between ">
+                                    <div style="font-size: 20px;" class="pl-2 text-muted">Merk:</div>
+                                    <div style="font-size: 20px;" class="pr-2 text-danger">@($"{car.Brand.Type:C}")</div>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between ">
+                                    <div style="font-size: 20px;" class="pl-2 text-muted">Prijs:</div>
+                                    <div style="font-size: 20px;" class="pr-2 text-danger">@($"{car.CurrentPrice:C}")</div>
+                                </div>
+                                <br/>
+                                <a asp-action="Details" class="btn btn-success" style="border-radius:2px;" asp-route-id="@car.Id">Details</a>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-    }
 </div>
+
+@* <div class="row pb-3 backgroundWhite"> *@
+@*     @foreach (var car in Model) *@
+@*     { *@
+@*         <div class="col-lg-3 col-md-6"> *@
+@*             <div class="row p-2"> *@
+@*                 <div class="col-12  p-1" style="border:1px solid #008cba; border-radius: 5px;"> *@
+@*                     <div class="card" style="border:0;"> *@
+@*                         <img src="@car.ImageUrl" class="card-img-top rounded" alt=""/> *@
+@*                         <div class="pl-1"> *@
+@*                             <p class="card-title h5"> *@
+@*                                 <b style="color:#2c3e50"></b> *@
+@*                             </p> *@
+@*                         </div> *@
+@*                         <div style="padding-left:5px;"> *@
+@*                             <h4 style="color:#888C8F "> <b class="">@car.Title</b></h4> *@
+@*                         </div> *@
+@*                         <div style="padding-left:5px;"> *@
+@*                             <p style="color:#888C8F">Prijs: <b class="">@($"{car.CurrentPrice:C}")</b></p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                     <div > *@
+@*                         <a asp-action="Details" class="btn btn-primary form-control" asp-route-id="@car.Id">Details</a> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     } *@
+@* </div> *@

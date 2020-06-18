@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Rentacar.BusinessLogic.Interface;
 using Rentacar.DataAccess.Data.Repository.IRepository;
+using Rentacar.DataAccess.Dto.BrandDto;
 using Rentacar.DataAccess.Dto.FuelDto;
 using Rentacar.Models;
 
@@ -36,6 +37,18 @@ namespace Rentacar.BusinessLogic
             _unitOfWork.Save();
 
             return _mapper.Map<FuelDto>(fuelModel);
+        }
+
+
+        public FuelDto Delete(int? id)
+        {
+            var items = _unitOfWork.Fuel.Get(id.GetValueOrDefault());
+
+            var map = _mapper.Map<FuelDto>(items);
+
+            _unitOfWork.Fuel.Remove(items);
+            _unitOfWork.Save();
+            return map;
         }
 
 

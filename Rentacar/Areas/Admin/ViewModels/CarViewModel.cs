@@ -10,6 +10,10 @@ namespace Rentacar.Areas.Admin.ViewModels
     {
         public int Id { get; set; }
         
+        public string Title { get; set; }
+        
+        public string Description { get; set; }
+        
         public int BrandId { get; set; }
 
         public string LicensePlate { get; set; }
@@ -19,8 +23,13 @@ namespace Rentacar.Areas.Admin.ViewModels
         public double CurrentPrice { get; set; }
         
         public bool Availability { get; set; }
+
+        public string ImageUrl { get; set; }
+
         public CarDto Car { get; set; }
         public IEnumerable<SelectListItem> BrandList { get; set; }
         public IEnumerable<SelectListItem> FuelList { get; set; }
+
+        
     }
 }

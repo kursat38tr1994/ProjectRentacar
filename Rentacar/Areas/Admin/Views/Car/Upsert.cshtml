@@ -1,30 +1,50 @@
-﻿@model Rentacar.Areas.Admin.ViewModels.CarViewModel
+﻿@model Rentacar.Areas.Admin.ViewModels.CarViewModel 
 @{
-    var title = "Maak nieuwe Auto";
+    var title = "Maak een nieuwe auto aan";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form method="post" asp-action="Upsert">
+<form method="post" enctype="multipart/form-data">
 
     <div class="row px-2 mx-2 backgroundWhite border">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @if (Model.Id != 0)
         {
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
             title = "Auto Wijzigen";
         }
 
         <div class="col-12">
             <h2 class="text-primary">@title</h2>
-            <br />
+            <br/>
         </div>
         <div class="col-9">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Title"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Title" class="form-control"/>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                
+                
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Description"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
             <div class="form-group row">
                 <div class="col-4">
                     <label asp-for="LicensePlate"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="LicensePlate" class="form-control" />
+                    <input asp-for="LicensePlate" class="form-control"/>
                     <span asp-validation-for="LicensePlate" class="text-danger"></span>
                 </div>
             </div>
@@ -34,7 +54,7 @@
                     <label asp-for="BrandId"></label>
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.BrandId, Model.BrandList, "- Selecteer uw Brand - ", new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.BrandId, Model.BrandList, "- Selecteer uw Brand - ", new {@class = "form-control"})
                 </div>
             </div>
 
@@ -43,7 +63,7 @@
                     <label asp-for="FuelId"></label>
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.FuelId, Model.FuelList, "- Selecteer uw Fuel - ", new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.FuelId, Model.FuelList, "- Selecteer uw Fuel - ", new {@class = "form-control"})
                 </div>
             </div>
 
@@ -52,8 +72,17 @@
                     <label asp-for="CurrentPrice"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="CurrentPrice" id="txtCurrentPrice" class="form-control" />
+                    <input asp-for="CurrentPrice" id="" class="form-control" placeholder="@Model.CurrentPrice"/>
                     <span asp-validation-for="CurrentPrice" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                   <label asp-for="ImageUrl"></label>
+                </div>
+                <div class="col-8">
+                    <input  type="file" name="files" id="uploadBox" multiple class="form-control"/>
                 </div>
             </div>
 
@@ -62,23 +91,29 @@
                     <label asp-for="Availability"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Availability" class="form-control" />
+                    <input asp-for="Availability" class="form-control"/>
                     <span asp-validation-for="Availability" class="text-danger"></span>
                 </div>
             </div>
+
 
             <div class="form-group row">
                 <div class="col-8 offset-4">
                     @if (Model.Id != 0)
                     {
-                        //Edit button and back to list
-                        <partial name="_EditAndBackToListButton" model="Model.Id" />
+                        //Edit button and back to list 
+                        <partial name="_EditAndBackToListButton" model="Model.Id"/>
                     }
                     else
                     {
-                          //Create button and back to list
-                        <partial name="_CreateAndBackToListButton" />
-
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Maken</button>
+                            </div>
+                            <div class="col">
+                                <a asp-action="Index" class="btn btn-success form-control">Terug</a>
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
@@ -86,3 +121,17 @@
     </div>
 </form>
 
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+
+    <script> 
+         function validateInput() { 
+             if (document.getElementById("uploadBox").value === "") { 
+                 swal("Error", "Please select an image", "error"); 
+                 return false; 
+             } 
+             return true; 
+         }
+     </script>
+}

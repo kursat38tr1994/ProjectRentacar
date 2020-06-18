@@ -20,7 +20,7 @@ namespace Rentacar.BusinessLogic
 
         public CarDto GetFirstOfDefault(int? id)
          {
-             var obj = _unitOfWork.Car.GetFirstOrDefault(u => u.Id == id);
+             var obj = _unitOfWork.Car.GetFirstOrDefault(u => u.Id == id, includeProperties:"Brand,Fuel");
 
              return _mapper.Map<CarDto>(obj);
          }
@@ -28,7 +28,8 @@ namespace Rentacar.BusinessLogic
         
         public IEnumerable<CarDto> GetAll()
         {
-            var obj = _unitOfWork.Car.GetAll();
+            var obj = _unitOfWork.Car.GetAll(car=> car.Availability, includeProperties:"Brand,Fuel");
+
             return _mapper.Map<IEnumerable<CarDto>>(obj);
         }
 
@@ -37,6 +38,7 @@ namespace Rentacar.BusinessLogic
         public CarDto GetId(int? id)
         {
             var obj = _unitOfWork.Car.Get(id.GetValueOrDefault());
+
             return _mapper.Map<CarDto>(obj);
         }
 
@@ -64,10 +66,21 @@ namespace Rentacar.BusinessLogic
             var map = _mapper.Map<CarDto>(obj);
             
             _unitOfWork.Car.Remove(obj);
+
             _unitOfWork.Save();
 
             return map;
         }
-        
+
+
+        public void ChangeAvailability(CarDto carModel)
+        {
+            
+            var mapper = _mapper.Map<Car>(carModel);
+
+            _unitOfWork.Car.Update(mapper);
+            _unitOfWork.Save();
+        }
     }
+        
 }

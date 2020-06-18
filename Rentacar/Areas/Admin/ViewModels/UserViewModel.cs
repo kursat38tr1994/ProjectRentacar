@@ -4,7 +4,7 @@ using Rentacar.Models;
 
 namespace Rentacar.Areas.Admin.ViewModels
 {
-    public class UserViewModel 
+    public class     UserViewModel 
     {
         public UserViewModel()
         {

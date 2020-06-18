@@ -35,11 +35,6 @@ namespace Rentacar.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        [Authorize(Roles = "Member")]
-        public IActionResult Member()
-        {
-            return View();
-        }
+        
     }
 }

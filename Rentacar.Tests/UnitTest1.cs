@@ -1,18 +1,18 @@
-using NUnit.Framework;
+using System;
+using Microsoft.EntityFrameworkCore;
+using Rentacar.DataAccess;
+using Xunit;
 
 namespace Rentacar.Tests
 {
-    public class Tests
+    public class UnitTest1
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
-        [Test]
+        [Fact]
         public void Test1()
         {
-            Assert.Pass();
+            //Arrange
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: "database_name").Options;
+
         }
     }
 }

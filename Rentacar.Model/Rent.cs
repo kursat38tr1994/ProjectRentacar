@@ -11,10 +11,10 @@ namespace Rentacar.Models
         
         [Required]
         public string UserId { get; set; }
-        [ForeignKey("UserId")]
+       // [ForeignKey("UserId")]
         
         public User User { get; set; }
-
+        
         public DateTime RentDate { get; set; }
         
         public DateTime ReturnDate { get; set; } 

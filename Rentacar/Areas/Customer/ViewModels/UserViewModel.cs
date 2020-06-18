@@ -1,4 +1,8 @@
-﻿namespace Rentacar.Areas.Customer.ViewModels
+﻿using System.Collections.Generic;
+using Rentacar.DataAccess.Dto.BrandDto;
+using Rentacar.DataAccess.Dto.CarDto;
+
+namespace Rentacar.Areas.Customer.ViewModels
 {
     public class UserViewModel
     {

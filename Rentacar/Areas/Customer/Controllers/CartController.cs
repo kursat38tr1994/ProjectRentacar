@@ -2,11 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Rentacar.Areas.Customer.ViewModels;
+using Rentacar.BusinessLogic;
+using Rentacar.BusinessLogic.Rent;
 using Rentacar.DataAccess.Data.Repository.IRepository;
+using Rentacar.DataAccess.Dto.CarDto;
+using Rentacar.DataAccess.Dto.RentDetailsDto;
+using Rentacar.DataAccess.Dto.RentDto;
+using Rentacar.DataAccess.Dto.UserDto;
+using Rentacar.Extensions;
 using Rentacar.Models;
 using Rentacar.Utility;
 
@@ -15,120 +26,153 @@ namespace Rentacar.Areas.Customer.Controllers
     [Area("Customer")]
     public class CartController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<User> _userManager;
+        private readonly ICarLogic _carLogic;
+        private readonly IMapper _mapper;
+        private readonly IUserDetails _userDetails;
+        private readonly IRentDetailsLogic _rentDetailsLogic;
+        private readonly IRentLogic _rentLogic;
 
-        [BindProperty] 
-        public ShoppingCartViewModel ShoppingCartViewModel { get; set; }
-
-        public CartController(IUnitOfWork unitOfWork, UserManager<User> userManager)
+        public CartController( ICarLogic carLogic, IUnitOfWork unitOfWork,
+            IMapper mapper, IUserDetails userDetails, IRentDetailsLogic rentDetailsLogic, IRentLogic rentLogic)
         {
-            _unitOfWork = unitOfWork;
-            _userManager = userManager;
+       
+            _carLogic = carLogic;
+            _mapper = mapper;
+            _userDetails = userDetails;
+            _rentDetailsLogic = rentDetailsLogic;
+            _rentLogic = rentLogic;
+
+            ShoppingCartViewModel = new ShoppingCartViewModel
+            {
+                ListCar = new List<CarDto>(),
+                Rent = new RentDto()
+            };
+        }
+
+        [BindProperty] private ShoppingCartViewModel ShoppingCartViewModel { get; set; }
+
+
+        public List<int> HttpSession()
+        {
+            var sessions = HttpContext.Session.GetObject<List<int>>(Session.SessionCart);
+            if (HttpContext.Session.GetObject<List<int>>(Session.SessionCart) != null)
+            {
+                foreach (var carId in sessions)
+                {
+                    var getCarFromDb = _carLogic.GetFirstOfDefault(carId);
+                    var mapperToCar = _mapper.Map<CarDto>(getCarFromDb);
+
+                    ShoppingCartViewModel.ListCar.Add(mapperToCar);
+                }
+            }
+
+            return sessions;
+        }
+
+        public Claim GetUserClaim()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            
+
+            return claim;
         }
 
         public IActionResult Index()
         {
-            var claimsIdentity = (ClaimsIdentity) User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            
-            ShoppingCartViewModel = new ShoppingCartViewModel()
-            {
-               Rent = new Rent(),
-               ListCart = _unitOfWork.ShoppingCart.GetAll(u=> u.UserId == claim.Value, includeProperties:"Car"),
-            };
-            
-            ShoppingCartViewModel.Rent.Total = 0;
-            ShoppingCartViewModel.Rent.User = _unitOfWork.User.GetFirstOrDefault(u => u.Id == claim.Value);
 
-            foreach (var list in ShoppingCartViewModel.ListCart)
-            {
-                list.Price = list.Car.CurrentPrice;
-                ShoppingCartViewModel.Rent.Total += list.Price;
-            }
-            
+
+            HttpSession();
+
             return View(ShoppingCartViewModel);
         }
 
         public IActionResult Remove(int cartId)
         {
-            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartId, includeProperties: "Car");
-
-            var cnt = _unitOfWork.ShoppingCart.GetAll(u => u.UserId == cart.UserId).ToList().Count;
-            
-            _unitOfWork.ShoppingCart.Remove(cart);
-            _unitOfWork.Save();
-            HttpContext.Session.SetInt32(Session.SessionCart, cnt - 1);
+            var sessions = HttpContext.Session.GetObject<List<int>>(Session.SessionCart);
+            sessions.Remove(cartId);
+            HttpContext.Session.SetObject(Session.SessionCart, sessions);
 
             return RedirectToAction(nameof(Index));
         }
         
+
+        [Authorize]
         public IActionResult Summary()
         {
+            var userClaim = GetUserClaim();
+            ShoppingCartViewModel.User = _userDetails.GetFirstOfDefault(userClaim.Value);
 
-            var claimsIdentity = (ClaimsIdentity) User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            ShoppingCartViewModel = new ShoppingCartViewModel()
-            {
-                Rent = new Rent(),
-                ListCart = _unitOfWork.ShoppingCart.GetAll(c=> c.UserId == claim.Value, includeProperties:"Car")
-            };
-            
-            ShoppingCartViewModel.Rent.User = _unitOfWork.User.GetFirstOrDefault(c => c.Id == claim.Value);
-            
-            foreach (var list in ShoppingCartViewModel.ListCart)
-            {
-                list.Price = list.Car.CurrentPrice;
-                ShoppingCartViewModel.Rent.Total += list.Price;
-            }
+            HttpSession();
 
             return View(ShoppingCartViewModel);
         }
-        
+
         [HttpPost]
-        [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        public IActionResult SummaryPost()
+        public IActionResult Summary(ShoppingCartViewModel model)
         {
-            var claimsIdentity = (ClaimsIdentity) User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            
-            ShoppingCartViewModel.Rent.User = _unitOfWork.User.GetFirstOrDefault(c => c.Id == claim.Value);
-
-            ShoppingCartViewModel.ListCart = _unitOfWork.ShoppingCart.GetAll(c => c.UserId == claim.Value, includeProperties:"Car");
-
-            ShoppingCartViewModel.UserId = claim.Value;
-            //ShoppingCartViewModel.Rent.Total = ShoppingCartViewModel.Rent.Total;
-            
-            _unitOfWork.Rent.Add(ShoppingCartViewModel.Rent);
-            _unitOfWork.Save();
-            
-            foreach (var item in ShoppingCartViewModel.ListCart)
+            ShoppingCartViewModel = new ShoppingCartViewModel
             {
-                RentDetails rent = new RentDetails()
-                {
-                    CarId = item.CarId,
-                    RentId = ShoppingCartViewModel.Rent.Id,
-                    Price = item.Price
-                };
-                ShoppingCartViewModel.Rent.Total += rent.Price;
-                _unitOfWork.RentDetails.Add(rent);
-                _unitOfWork.Save();
-            }
-
-            _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartViewModel.ListCart);
-            _unitOfWork.Save();
+                ListCar = new List<CarDto>(),
+                Rent = new RentDto(),
+                
+            };
             
-            HttpContext.Session.SetInt32(Session.SessionCart, 0);
+            HttpSession();
 
-            return RedirectToAction("OrderConfirmation", "Cart", new {id = ShoppingCartViewModel.Rent.Id});
+            if (ModelState.IsValid)
+            {
+                foreach (var car in ShoppingCartViewModel.ListCar)
+                {
+                    ShoppingCartViewModel.Rent.Total += car.CurrentPrice;
+                }
+
+                ShoppingCartViewModel.Rent.RentDate = model.RentDate;
+                ShoppingCartViewModel.Rent.ReturnDate = model.ReturnDate;
+                ShoppingCartViewModel.Rent.UserId = GetUserClaim().Value;
+                
+                _rentLogic.AddRent(ShoppingCartViewModel.Rent);
+
+                foreach (var car in ShoppingCartViewModel.ListCar)
+                {
+                    ShoppingCartViewModel.Rent.Total += car.CurrentPrice;
+                    
+                    var rentDetails = new RentDetailsDto
+                    {
+                        CarId = car.Id,
+                        RentId = ShoppingCartViewModel.Rent.Id,
+                        Price = car.CurrentPrice
+                    };
+
+                    _rentDetailsLogic.AddDetail(rentDetails);
+
+                    var carDetails = new CarDto
+                    {
+                        Id = car.Id,
+                        Brand = car.Brand,
+                        BrandId = car.BrandId,
+                        CurrentPrice = car.CurrentPrice,
+                        Description = car.Description,
+                        Fuel = car.Fuel,
+                        FuelId = car.FuelId,
+                        ImageUrl = car.ImageUrl,
+                        LicensePlate = car.LicensePlate,
+                        Title = car.Title,
+                        Availability = false
+                    };
+
+                    _carLogic.ChangeAvailability(carDetails);
+                    
+                }
+                return RedirectToAction("OrderConfirmation", "Cart", new { id = ShoppingCartViewModel.Rent.Id });
+            }
+            return View(ShoppingCartViewModel);
         }
 
         public IActionResult OrderConfirmation(int id)
         {
             return View(id);
         }
-        
     }
 }

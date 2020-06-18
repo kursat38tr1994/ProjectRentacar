@@ -7,11 +7,6 @@ namespace Rentacar.Models
     public class ShoppingCart
     {
 
-        public ShoppingCart()
-        {
-            Count = 1;
-        }
-        
         [Key]
         public int Id { get; set; }
 
@@ -33,5 +28,7 @@ namespace Rentacar.Models
         
         [NotMapped]
         public double Price { get; set; }
+        
+        public double ImageUrl { get; set; }
     }
 }

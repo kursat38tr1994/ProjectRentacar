@@ -55,12 +55,7 @@ namespace Rentacar.Areas.Admin.Controllers
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
                 return NotFound();
             }
-
-            // GetClaimsAsync retunrs the list of user Claims
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            // GetRolesAsync returns the list of user Roles
-            var userRoles = await _userManager.GetRolesAsync(user);
-
+            
             var model = new UserViewModel()
             {
                 Id = user.Id,
@@ -72,8 +67,8 @@ namespace Rentacar.Areas.Admin.Controllers
                 Residence = user.Residence,
                 Postalcode = user.Postalcode,
                 Housenumber = user.Housenumber,
-                Claims = userClaims.Select(c => c.Value).ToList(),
-                Roles = userRoles
+                //Claims = userClaims.Select(c => c.Value).ToList(),
+                //Roles = userRoles
             };
 
             return View(model);
@@ -127,8 +122,9 @@ namespace Rentacar.Areas.Admin.Controllers
                 Residence = user.Residence,
                 Postalcode = user.Postalcode,
                 Housenumber = user.Housenumber,
-                Claims = userClaims.Select(c => c.Value).ToList(),
-                Roles = userRoles
+                //Claims = userClaims.Select(c => c.Value).ToList(),
+                //Roles = userRoles
+
             };
 
             return View(model);
@@ -158,119 +154,5 @@ namespace Rentacar.Areas.Admin.Controllers
 
             return View("Index");
         }
-        // public IActionResult Index()
-        // {
-        //     var claimsIdentity = (ClaimsIdentity) User.Identity;
-        //     var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-        //
-        //     var userList = _unitOfWork.User.GetAll().ToList();
-        //     var userRole = _db.UserRoles.ToList();
-        //     var roles = _db.Roles.ToList();
-        //
-        //     foreach (var user in userList)
-        //     {
-        //         var roleId = userRole.FirstOrDefault(u => u.UserId == user.Id)?.RoleId;
-        //         user.Role = roles.FirstOrDefault(u => u.Id == roleId)?.Name;
-        //     }
-        //     
-        //     return View(userList);
-        // }
-
-        
-        public IActionResult Lock(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.User.LockedUser(id);
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult Unlock(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.User.UnlockUser(id);
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        // public async Task<IActionResult> UpdateUser(string id)
-        // {
-        //     var user = _userManager.FindByIdAsync(id);
-        //
-        //     if (user == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     
-        //     return View();
-        // }
-        // public async Task<IActionResult> Update(string Id)
-        // {
-        //     
-        //     
-        //     var user = _userManager.FindByIdAsync(Id);
-        //
-        //     
-        //     user. = model.Firstname;
-        //         // Firstname = user.Firstname,
-        //         // Surname = user.Surname,
-        //         // Address = user.Address,
-        //         // Residence = user.Residence,
-        //         // Postalcode = user.Postalcode,
-        //         // Housenumber = user.Housenumber
-        //
-        //         return View(model);
-        // }
-        
-        // public async Task<IActionResult> Update(string id)
-        // {
-        //     
-        //     
-        //     var user =  await  _userManager.GetUserAsync(User);
-        //     if (user == null)
-        //     {
-        //         return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //     }
-        //
-        //     var hasPassword = await _userManager.HasPasswordAsync(user);
-        //     if (!hasPassword)
-        //     {
-        //         return RedirectToPage("./SetPassword");
-        //     }
-        //
-        //     return View();
-        //     
-        //     //var user = _unitOfWork.User.Get(id);
-        //
-        //     if (user != null)
-        //     {
-        //         _unitOfWork.User.
-        //     }
-        //     
-        //     return 
-        // }
-        
-
-        // [HttpPost]
-        // public IActionResult GetAll()
-        // {
-        //     var userList = _unitOfWork.User.GetAll().ToList();
-        //     var userRole = _db.UserRoles.ToList();
-        //     var roles = _db.Roles.ToList();
-        //
-        //     foreach (var user in userList)
-        //     {
-        //         var roleId = userRole.FirstOrDefault(u => u.UserId == user.Id)?.RoleId;
-        //         user.Role = roles.FirstOrDefault(u => u.Id == roleId)?.Name;
-        //         
-        //     }
-        //
-        //     return View(userList);
-        // }
     }
 }

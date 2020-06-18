@@ -1,5 +1,8 @@
 ﻿@using Rentacar.Utility
 @using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @* Opzoeken!!!!! *@
 @inject IHttpContextAccessor HttpContextAccessor
 @using Rentacar.Extensions
@@ -55,9 +58,6 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>
 
                 @if (User.IsInRole(Roles.Admin))
                 {
@@ -68,20 +68,23 @@
                 <li class="nav-item">
                     <a class="nav-link " asp-area="Customer" asp-controller="Car" asp-action="Index">Cars</a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="Admin" asp-controller="Order" asp-action="Index">Orders</a>
-                </li>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link " asp-area="Admin" asp-controller="Order" asp-action="Index">Orders</a>
+                    </li>
+                }
                 @* <li class="nav-item"> *@
                 @*     <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Member">Member</a> *@
                 @* </li> *@
 
-                @if (HttpContextAccessor.HttpContext.Session.GetInt32(Session.SessionCart) != null)
+
+                @if (HttpContextAccessor.HttpContext.Session.GetObject<List<int>>(Session.SessionCart) != null)
                 {
                     <li style="color: white">
                         <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link text-white">
                             @{
-                                var count = HttpContextAccessor.HttpContext.Session.GetInt32(Session.SessionCart);
+                                var count = HttpContextAccessor.HttpContext.Session.GetObject<List<int>>(Session.SessionCart).Count;
                             }
                             <i class="fas fa-shopping-cart"> </i>&nbsp; (@count)
                         </a>
@@ -95,8 +98,8 @@
                         </a>
                     </li>
                 }
+                
             </ul>
-
         </div>
         <partial name="_Identity"/>
     </nav>
@@ -125,6 +128,9 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <script src="https://kit.fontawesome.com/e19c476714.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/lib/jquery/jquery-ui-1.12.1.min.js"></script>
 
 <script src="~/js/site.js" asp-append-version="true"></script>
 

@@ -4,7 +4,10 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rentacar.Areas.Admin.ViewModels;
+using Rentacar.BusinessLogic;
+using Rentacar.BusinessLogic.Order;
 using Rentacar.DataAccess.Data.Repository.IRepository;
+using Rentacar.DataAccess.Dto.RentDto;
 using Rentacar.Models;
 using Rentacar.Utility;
 
@@ -14,15 +17,18 @@ namespace Rentacar.Areas.Customer.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IOrderLogic _orderLogic;
+        private readonly IUserDetails _userDetails;
 
-        [BindProperty] public OrderViewModel OrderViewModel { get; set; }
+        [BindProperty] private OrderViewModel OrderViewModel { get; set; }
 
-        public OrderController(IUnitOfWork unitOfWork)
+        public OrderController(IOrderLogic orderLogic , IUserDetails userDetails)
         {
-            _unitOfWork = unitOfWork;
+            _orderLogic = orderLogic;
+            _userDetails = userDetails;
         }
-        // GET
+        
+        
         public IActionResult Index()
         {
             return View();
@@ -33,8 +39,8 @@ namespace Rentacar.Areas.Customer.Controllers
         {
             OrderViewModel = new OrderViewModel()
             {
-                Rent = _unitOfWork.Rent.GetFirstOrDefault(u => u.Id == id, includeProperties: "User"),
-                OrderDetails = _unitOfWork.RentDetails.GetAll(o=> o.Id == id, includeProperties:"Car")
+                Rent = _orderLogic.GetAllRent(id),
+                RentDetails = _orderLogic.GettAllRentDetails(id)
             };
             
             return View(OrderViewModel);
@@ -45,23 +51,19 @@ namespace Rentacar.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity) User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            IEnumerable<Rent> rent;
+            
+            IEnumerable<RentDto> rent;
             
             if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employee))
             {
-                rent = _unitOfWork.Rent.GetAll(includeProperties:"User");
+                rent = _orderLogic.AdminRentData();
             }
             else
             {
-                rent = _unitOfWork.Rent.GetAll(u=> u.UserId == claim.Value, includeProperties:"User");    
+                rent = _orderLogic.UserRentData(claim.Value);
             }
 
             return Json(new {data = rent});
-
         }
-        
-        
-        
     }
 }

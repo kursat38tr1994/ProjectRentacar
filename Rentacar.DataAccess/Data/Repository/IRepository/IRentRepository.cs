@@ -10,5 +10,7 @@ namespace Rentacar.DataAccess.Data.Repository.IRepository
     {
      
         void Update(Rent obj);
+
+        public int ReturnLast();
     }
 }

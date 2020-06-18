@@ -20,8 +20,8 @@ namespace Rentacar.DataAccess
        
        public DbSet<User> User { get; set; }
 
-        public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<Rent> Rent { get; set; }
+
         public DbSet<RentDetails> RentDetail { get; set; }
         
     }

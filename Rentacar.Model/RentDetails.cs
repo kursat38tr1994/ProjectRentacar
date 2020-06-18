@@ -14,13 +14,13 @@ namespace Rentacar.Models
         [ForeignKey("RentId")] 
         public Rent Rent { get; set; }
         
-          
         [Required] 
         public int CarId { get; set; }
         
         [ForeignKey("CarId")] 
         public Car Car { get; set; }
         
+        [Required] 
         public double Price { get; set; }
     }
 }
